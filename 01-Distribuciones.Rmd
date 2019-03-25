@@ -43,7 +43,7 @@ $$
 \begin{array}{lll}
 \hline
 \textbf{Distribución} & {\textbf{Nombre en R}} & {\textbf{Parámetros}}\\ \hline
-\mbox{Binomial} &{\texttt{binom}} & \mbox{medida de la muestra $n$, probabilidad $p$}\\
+\mbox{Binomial} &{\texttt{binom}} & \mbox{tamaño de la muestra $n$, probabilidad $p$}\\
 \mbox{Geométrica} & {\texttt{geom}} & \mbox{$p$}\\
 \mbox{Hipergeométrica} & {\texttt{hyper}} & \mbox{tamaño de la población $N$, número poblacional}\\[-0.75ex] 
 & & \mbox{de éxitos $M$, tamaño de la muestra $n$}\\
@@ -134,8 +134,8 @@ qbinom(0.5,20,0.3)
 |        Comprobemos que $P(X\leq `r qbinom(0.5,20,0.3)`)\geq 0.5$ y en cambio $P(X\leq `r qbinom(0.5,20,0.3)-1`)< 0.5$:
 
 ```{r}
-pbinom(qbinom(0.5,20,0.3),20,0.3) 
-pbinom(qbinom(0.5,20,0.3)-1,20,0.3) 
+pbinom(6,20,0.3) 
+pbinom(5,20,0.3) 
 ```
 
 
@@ -198,20 +198,22 @@ dnorm(0.3)
 dnorm(0.3,0,1)
 ```
 
-Las funciones densidad y distribución de una variable aleatoria se pueden dibujar con la función `curve`.
+Las funciones densidad y distribución de una variable aleatoria se pueden dibujar con la función `curve`. Así, la función siguiente dibuja la gráfica de la densidad de una variable normal estándard de la Figura \@ref(fig:dnorm):
 
-```{r, fig.cap="Función densidad de una variable N(0,1)"}
+```{r, fig.cap="Función densidad de una variable N(0,1).", label=dnorm}
 curve(dnorm(x,0,1.5),-5,5,xlab="",ylab="",main="")
 ```
 
-```{r, fig.cap="Función distribución de una variable N(0,1)"}
+De manera similar, la función siguiente dibuja la gráfica de la función de distribución de una variable normal estándard de la Figura \@ref(fig:pnorm):
+
+```{r, fig.cap="Función distribución de una variable N(0,1).", label=pnorm}
 curve(pnorm(x,0,1.5),-5,5,xlab="",ylab="",main="")
 ```
 
 ## Ejercicios
 
 
-#### Modelo de test {-}
+### Test {-}
 
 *(1)* Sea $f$ la función de densidad de una variable aleatoria normal con $\mu=0.2$ y $\sigma=1.2$. Dad el valor de $f(0.5)$ redondeado a 4 cifras decimales. 
 
@@ -221,33 +223,67 @@ curve(pnorm(x,0,1.5),-5,5,xlab="",ylab="",main="")
 
 *(4)* Dad una instrucción que calcule la mediana de una lista de 20 números aleatorios generados con distribución $B(10,0.2)$. No deis el resultado, solo la instrucción.
 
+<!--
+### Problemas {-}
 
+**(1)** Como sabéis, si $X$ es una variable aleatoria Bernoulli $Be(p)$, es decir, de probabilidad de éxito $p$, e $Y$ es la variable aleatoria que nos da el número de fracasos antes de obtener el primer éxito en una secuencia de repeticiones independientes de $X$, entonce $Y$ sigue una  **distribución geométrica** $Ge(p)$.  
 
+Por lo tanto, si efectuamos una serie de lanzamientos independientes de una moneda no trucada, las longitudes de las **rachas de cruces** (las secuencias de cruces entre pares de caras consecutivas) que nos salgan seguirán una distribución geométrica $Ge(0.5)$, porque nos dan los números de cruces (fracasos) obtenidos antes de sacar una cara (éxito) en repeticiones independientes de una v.a. $Be(0.5)$, reiniciando el contador en cada cara. Vamos a comprobarlo a mediante una simulación sencilla. 
 
-#### Respuestas al test {-}
+*(a)* Generad un vector aleatorio binario $X$ de longitud 10^6^ con distribución Bernoulli $Be(0.5)$, que representará un millón de lanzamientos de una moneda honrada (0 cruz, 1 cara). Quedaos con el vector que va de su primer 1 a su último 1, y seguid llamándole $X$ al vector resultante.
+
+*(b)* Calculad las longitudes de todas las secuencias maximales de 0s en $X$ (es decir, de las secuencias de 0s que separan pares de 1s consecutivos). Por lo que hemos explicado, estas longitudes deberían seguir una distribución geométrica $Ge(0.5)$.
+
+*(c)* Dibujad un histograma de líneas de las frecuencias relativas de las longitudes de cadenas maximales de ceros obtenidas de esta manera, y superponed un diagrama poligonal de las probabilidades de dichas longitudes según la distribución $Ge(0.5)$. Para mejorar la visibilidad del gráfico, representad solo las longitudes $k$ cuya probabilidad bajo una distribución $Ge(0.5)$ sea al menos  0.0001. Comentad el gráfico obtenido.
+-->
+
+### Respuestas al test {-}
 
 *(1)* `r round(dnorm(0.5,0.2,1.2),4)`
 
-```{r,include=FALSE}
-#(Lo hemos calculado con `round(dnorm(0.5,0.2,1.2),4)`)
-```
+(Lo hemos calculado con `round(dnorm(0.5,0.2,1.2),4)`)
 
 *(2)* `r round(pnorm(7,0.2,1.2)-pnorm(3,0.2,1.2),4)`
 
-```{r,include=FALSE}
-#(Lo hemos calculado con `round(pnorm(7,0.2,1.2)-pnorm(3,0.2,1.2),4)`)
-```
+(Lo hemos calculado con `round(pnorm(7,0.2,1.2)-pnorm(3,0.2,1.2),4)`)
 
 *(3)* `r round(pbinom(7,10,0.2)-pbinom(2,10,0.2),4)`
 
-```{r,include=FALSE}
-#(Lo hemos calculado con `round(pbinom(7,10,0.2)-pbinom(2,10,0.2),4)`. También obtenemos el resultado correcto con `round(sum(dbinom(3:7,10,0.2)),4)`. En cambio, con  `round(pbinom(7,10,0.2)-pbinom(3,10,0.2),4)` no se obtiene el resultado correcto: da `r round(pbinom(7,10,0.2)-pbinom(3,10,0.2),4)`. Pensad por qué aquí hay que restar `pbinom(2,10,0.2)` y en la pregunta anterior restábamos `pnorm(3,0.2,1.2)`.)
-```
+(Lo hemos calculado con `round(pbinom(7,10,0.2)-pbinom(2,10,0.2),4)`. También se obtiene el resultado correcto con `round(sum(dbinom(3:7,10,0.2)),4)`. En cambio, con  `round(pbinom(7,10,0.2)-pbinom(3,10,0.2),4)` no se obtiene el resultado correcto: da `r round(pbinom(7,10,0.2)-pbinom(3,10,0.2),4)`. Pensad por qué aquí hay que restar `pbinom(2,10,0.2)` y en la pregunta anterior restábamos `pnorm(3,0.2,1.2)`.)
 
 *(4)* `median(rbinom(20,10,0.2))`
 
+(También sería correcto `median(rbinom(20,size=10,prob=0.2))`, pero no es necesario dar los nombres de los parámetros si entráis sus valores en el orden correcto, y por eso no los hemos explicado.)
+
+<!--
+### Soluciones sucintas de los problemas  {-}
+
 ```{r,include=FALSE}
-#(También sería correcto `median(rbinom(20,size=10,prob=0.2))`, pero no es necesario dar los nombres de los parámetros si entráis sus valores en el orden correcto, y por eso no los hemos explicado.)
+set.seed(42)
 ```
 
+**(1)** *(a)* Como la distribución $Be(p)$ es la distribución binomial $B(1,p)$, podemos construir $X$ por medio de: 
+```{r}
+X=rbinom(10^6,1,0.5)
+X=X[min(which(X==1)):max(which(X==1))]
+```
 
+*(b)* Las longitudes de cadenas maximales de 0s en $X$ serán las diferencias entre posiciones consecutivas de 1s en $X$, menos 1 (si, digamos, hay un 1 en la posición 5a y el siguiente 1 está en la posición 13a, en medio hay $13-5-1=`r 13-5-1`$ 0s). Por lo tanto, el vector $Y$ de longitudes de cadenas maximales de 0s en $X$ se puede calcular con:
+```{r}
+Exitos=which(X==1)
+Y=diff(Exitos)-1
+```
+
+*(c)* Calculemos el mayor número natural $M$ tal que si $Y$ es una v.a. $Ge(0.5)$, $P(Y=M)\geq 10^{-4}$:
+```{r}
+M=max(which(dgeom(0:100,0.5)>=10^(-4)))-1
+M
+```
+
+El gráfico pedido es entonces:
+```{r}
+n=0:M
+plot(prop.table(table(Y)[n]),col="blue",type="h",xlab="Longitudes de cadenas maximales de 0s",ylab="Probabilidades")
+points(n,dgeom(n,0.5),col="red",type="o",pch=20,cex=0.5)
+```
+-->

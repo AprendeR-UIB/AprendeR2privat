@@ -25,14 +25,40 @@ knitr::opts_chunk$set(
   echo=TRUE, 
   warning=FALSE, 
   message=FALSE
+#  tidy.opts=list(width.cutoff=60),
+#  tidy=TRUE
 )
 knitr::opts_knit$set(global.par=TRUE)
 options(knitr.graphics.auto_pdf=TRUE)
+warning.length=100
 ```
 
 ```{r, include=FALSE}
 par(cex.main=0.9,cex.axis=0.8,cex.lab=0.8)
 ```
+
+
+
+```{r, paquets, include=FALSE}
+#https://liao961120.github.io/2019/03/10/include_graphics2.html
+library(linguisticsdown)
+library(MASS)
+library(epitools)
+library(EnvStats)
+library(boot)
+library(BSDA)
+library(TeachingDemos)
+library(pwr)
+library(car)
+library(ape)
+library(nortest)
+library(fBasics)
+library(RCurl)
+```
+
+\renewcommand\chaptername{Lección}
+\renewcommand{\leq}{\leqslant}
+\renewcommand{\geq}{\geqslant}
 
 
 # Presentación {-}
@@ -43,18 +69,3 @@ El libro está escrito en *R Markdown*, usando *RStudio* como editor de texto y 
 
 Este trabajo se publica bajo licencia [Atribución-No Comercial-SinDerivadas 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/)
 
-```{r,eval=FALSE,include=FALSE}
-### Historial {-}
-
-* 19-02-04: Definitiva para mí Lección 6 (Cesc)
-* 19-01-28: Definitiva para mí Lección 5 (Cesc)
-* 19-01-24: Definitivos para mí Lecciones 1, 2, 3, 4 (Cesc)
-
-### Preguntas {-}
-
-* Damos las soluciones de los ejercicios?
-
-* Damos cómo hemos calculado las respuestas de los tests?
-
-* En la Lección 2, encontráis adecuado incluir el código que ha generado las muestras de las figuras? No es elegante (los estratos y conglomerados deberían ser factores, pero paso de volver a hacer la figuras)
-```
