@@ -241,19 +241,19 @@ Por lo tanto, si efectuamos una serie de lanzamientos independientes de una mone
 
 *(1)* `r round(dnorm(0.5,0.2,1.2),4)`
 
-(Lo hemos calculado con `round(dnorm(0.5,0.2,1.2),4)`)
+Nosotros lo hemos calculado con `round(dnorm(0.5,0.2,1.2),4)`.
 
 *(2)* `r round(pnorm(7,0.2,1.2)-pnorm(3,0.2,1.2),4)`
 
-(Lo hemos calculado con `round(pnorm(7,0.2,1.2)-pnorm(3,0.2,1.2),4)`)
+Nosotros lo hemos calculado con `round(pnorm(7,0.2,1.2)-pnorm(3,0.2,1.2),4)`.
 
 *(3)* `r round(pbinom(7,10,0.2)-pbinom(2,10,0.2),4)`
 
-(Lo hemos calculado con `round(pbinom(7,10,0.2)-pbinom(2,10,0.2),4)`. También se obtiene el resultado correcto con `round(sum(dbinom(3:7,10,0.2)),4)`. En cambio, con  `round(pbinom(7,10,0.2)-pbinom(3,10,0.2),4)` no se obtiene el resultado correcto: da `r round(pbinom(7,10,0.2)-pbinom(3,10,0.2),4)`. Pensad por qué aquí hay que restar `pbinom(2,10,0.2)` y en la pregunta anterior restábamos `pnorm(3,0.2,1.2)`.)
+Nosotros lo hemos calculado con `round(pbinom(7,10,0.2)-pbinom(2,10,0.2),4)`. También se obtiene el resultado correcto con `round(sum(dbinom(3:7,10,0.2)),4)`. En cambio, con  `round(pbinom(7,10,0.2)-pbinom(3,10,0.2),4)` no se obtiene el resultado correcto: da `r round(pbinom(7,10,0.2)-pbinom(3,10,0.2),4)`. Pensad por qué aquí hay que restar `pbinom(2,10,0.2)` y en la pregunta anterior restábamos `pnorm(3,0.2,1.2)`.
 
 *(4)* `median(rbinom(20,10,0.2))`
 
-(También sería correcto `median(rbinom(20,size=10,prob=0.2))`, pero no es necesario dar los nombres de los parámetros si entráis sus valores en el orden correcto, y por eso no los hemos explicado.)
+También sería correcto `median(rbinom(20,size=10,prob=0.2))`, pero no es necesario dar los nombres de los parámetros si entráis sus valores en el orden correcto, y por eso no los hemos explicado.
 
 <!--
 ### Soluciones sucintas de los problemas  {-}

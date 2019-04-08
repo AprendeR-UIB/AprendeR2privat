@@ -54,6 +54,9 @@ library(ape)
 library(nortest)
 library(fBasics)
 library(RCurl)
+library(scatterplot3d)
+library(gplots)
+library(RColorBrewer)
 ```
 
 \renewcommand\chaptername{Lección}
