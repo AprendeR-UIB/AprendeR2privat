@@ -13,7 +13,7 @@ github-repo: cescrossello/AprendeR-II
 description: "Apuntes AprendeR bookdown::gitbook."
 ---
 
-```{r global_options, include=FALSE}
+```{r global_options,  include=FALSE}
 library(knitr)
 #library(xtable)
 #library(printr)
@@ -33,10 +33,9 @@ options(knitr.graphics.auto_pdf=TRUE)
 warning.length=100
 ```
 
-```{r, include=FALSE}
+```{r,  include=FALSE}
 par(cex.main=0.9,cex.axis=0.8,cex.lab=0.8)
 ```
-
 
 
 ```{r, paquets, include=FALSE}
@@ -57,6 +56,10 @@ library(RCurl)
 library(scatterplot3d)
 library(gplots)
 library(RColorBrewer)
+library(faraway)
+library(UsingR)
+library(agricolae)
+library(WRS2)
 ```
 
 \renewcommand\chaptername{Lección}
