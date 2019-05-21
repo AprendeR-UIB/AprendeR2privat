@@ -10,7 +10,7 @@ Recordad que, cuando disponemos de un conjunto de datos obtenidos midiendo una o
 
 *  **Exploratorio** o  **descriptivo**: su objetivo es resumir, representar y explicar los datos de la muestra. Para llevarlo a cabo, se usan técnicas de  **estadística  descriptiva** como las que hemos descrito en lecciones anteriores. 
 
-* **Inferencial** o **confirmatorio**: su objetivo es deducir (**inferir**),  a partir de los datos de la muestra, información significativa sobre el total de la población. A menudo esta inferencia pasa por contrastar una hipótesis sobre alguna propiedad de las características de la población. Las técnicas que se usan en este caso forman la **estadística  inferencial**.
+* **Inferencial** o **confirmatorio**: su objetivo es deducir (**inferir**),  a partir de los datos de la muestra, información significativa sobre el total de la población. A menudo esta inferencia pasa por contrastar una hipótesis sobre alguna propiedad de la población. Las técnicas que se usan en los análisis inferenciales forman la **estadística  inferencial**.
 
 Por ejemplo, supongamos que hemos tomado una muestra de estudiantes de la UIB y sabemos sus calificaciones en un semestre concreto y sus números de hermanos. En un estudio exploratorio simplemente describiríamos estos datos mediante estadísticos y gráficos, mientras que usaríamos técnicas de estadística inferencial para deducir información sobre la población de todos los  estudiantes de la UIB a partir de esta muestra: ¿Cuál estimamos que ha sido la nota media de los estudiantes de la UIB en el semestre en cuestión? La distribución de los números de hermanos en estudiantes de la UIB, ¿es similar a la del conjunto de la población española? ¿Es verdad que los estudiantes de la UIB con más hermanos tienen tendencia a tener mejores  notas?
 
@@ -69,15 +69,15 @@ knitr::include_graphics("AprendeR-Parte-II_files/figure-html/sinrepv.png")
 ```
 
 
-Cuando el tamaño de la población es muy grande en relación a la muestra, la probabilidad de que haya repeticiones en una muestra aleatoria simple es muy pequeña. Esto nos permite entender en este caso que los muestreos aleatorios con y sin reposición son equivalentes en el sentido siguiente: puesto que un muestreo con reposición da muy probablemente una muestra con todos sus elementos diferentes, aceptamos que una muestra obtenida sin reposición ha sido obtenida permitiendo repeticiones y que por tanto es simple. 
+Cuando el tamaño de la población es muy grande en relación a la muestra, la probabilidad de que haya repeticiones en una muestra aleatoria simple es muy pequeña. Esto nos permite entender en este caso que los muestreos aleatorios con y sin reposición son equivalentes en el sentido siguiente: puesto que si la población es muy, muy grande, un muestreo con reposición daría muy probablemente una muestra con todos sus elementos diferentes, si tomamos directamente la muestra sin reposición podemos aceptar que permitíamos repeticiones, pero que no se han dado, y que por tanto es simple. 
 
-A modo de ejemplo, vamos a calcular la probabilidad de al menos una repetición en muestras aleatorias simples de diferentes tamaños de una población de 12,000 individuos (aproximadamente, el número de estudiantes de la UIB) y representar estas probabilidades en un gráfico. Recordad que la probabilidad de que los sujetos de una muestra aleatoria simple de tamaño $n$  tomada de una población de $n$ individuos sean todos diferentes es
+A modo de ejemplo, vamos a calcular la probabilidad de al menos una repetición en muestras aleatorias simples de diferentes tamaños de una población de 12,000 individuos (aproximadamente, el número de estudiantes de la UIB) y representar estas probabilidades en un gráfico. Recordad que la probabilidad de que los sujetos de una muestra aleatoria simple de tamaño $n$  tomada de una población de $N$ individuos *no* sean todos diferentes es
 $$
-\frac{N(N-1)(N-2)\cdots (N-n+1)}{N^n}
+1-\frac{N(N-1)(N-2)\cdots (N-n+1)}{N^n}.
 $$
-y por lo tanto la probabilidad de que en una muestra haya algún elemento repetido es 1 menos este valor. Esta probabilidad es la que calcula la función `f(N,n)` del  bloque de código siguiente.
+Esta probabilidad es la que calcula la función `f(N,n)` del  bloque de código siguiente, y su gráfica es la de la Figura \@ref(fig:UIB). La curva negra representa las probabilidades deseadas. Hemos añadido al gráfico una línea horizontal que marca la probabilidad 0.01 y que muestra que la probabilidad de alguna repetición en una m.a.s. de 16 o menos estudiantes de la UIB es inferior al 1%: en más de 99 de cada 100 veces que tomemos una m.a.s. de a lo sumo 16 estudiantes, nos saldrán todos diferentes
 
-```{r, fig.cap="Probabilidad de repetición en una m.a.s. de n estudiantes de la UIB"}
+```{r, fig.cap="Probabilidad de repetición en una m.a.s. de n estudiantes de la UIB", label="UIB"}
 f=function(N,n){1-prod((N:(N-n+1))/N)}
 prob=sapply(1:200,f,N=12000)
 plot(1:200,prob,type="l",lwd=2,xlab="n",ylab="probabilidad",
@@ -86,11 +86,11 @@ abline(h=0.01,col="red")
 text(160,0.04,labels="probabilidad 0.01",col="red",cex=0.7)
 ```
 
-La curva negra representa las probabilidades deseadas. Hemos añadido al gráfico una línea horizontal que marca la probabilidad 0.01 y que muestra que la probabilidad de alguna repetición en una m.a.s. de 16 o menos estudiantes de la UIB es inferior al 1%. Así, por ejemplo, una muestra aleatoria sin reposición de 10 estudiantes  de la UIB podría haberse obtenido perfectamente tomando los estudiantes con reposición, porque la probabilidad de alguna repetición en una m.a.s. como esta es muy pequeña: `r round(f(12000,10),3)`. En cambio,  es difícil de creer que una muestra aleatoria de 200 estudiantes diferentes de la UIB sea simple, porque la probabilidad de alguna repetición en una m.a.s. como esta es grande: `r round(f(12000,200),3)`. 
+Así, por ejemplo, una muestra aleatoria de 10 estudiantes diferentes de la UIB podría haberse obtenido perfectamente tomando los estudiantes con reposición, porque la probabilidad de alguna repetición en una m.a.s. como esta es muy pequeña: `r round(f(12000,10),3)`. En cambio,  es difícil de creer que una muestra aleatoria de 200 estudiantes diferentes de la UIB sea simple, porque la probabilidad de alguna repetición en una m.a.s. como esta es grande: `r round(f(12000,200),3)`. 
 
-La mayoría de técnicas de estadística inferencial que se pueden usar para muestras aleatorias simples se pueden considerar igualmente válidas para muestras aleatorias sin reposición, siempre y cuando el tamaño de la población sea muy grande en relación al de la muestra (por dar una regla, al menos unas 1000 veces mayor).  Si el tamaño de la población es relativamente pequeño por comparación a la muestra, algunas de estas técnicas se pueden salvar aplicando correcciones adecuadas para compensar el efecto del tamaño de la población, y otras directamente pierden toda validez. 
+La mayoría de técnicas de estadística inferencial que se pueden usar para muestras aleatorias simples se pueden considerar igualmente válidas para muestras aleatorias sin reposición si el tamaño de la población es muy grande en relación al de la muestra (por dar una regla, digamos que,  al menos, unas 1000 veces mayor).  Si el tamaño de la población es relativamente pequeño por comparación a la muestra, algunas de estas técnicas se pueden salvar aplicando correcciones adecuadas para compensar la pequeñez de la población, y otras directamente pierden toda validez. 
 
-En todo caso, conviene remarcar que si queremos tomar una muestra aleatoria con o sin reposición de una población, es necesario disponer de una lista completa de todos sus individuos  para poder sortear a quién vamos a seleccionar. Esto no siempre es posible. ¿Alguien tiene la  lista completa de, pongamos, todos los diabéticos de España? ¿Que incluya los que aún no saben que lo son? Por lo tanto, en la vida real no siempre podemos tomar muestras aleatorias en el sentido que hemos explicado.
+En todo caso, conviene ser consciente de que si queremos tomar una muestra aleatoria con o sin reposición de una población, es necesario disponer de una lista completa de todos sus individuos  para poder sortear a quién vamos a seleccionar. Esto no siempre es posible. ¿Alguien tiene la  lista completa de, pongamos, todos los diabéticos de España? ¿Que incluya los que no saben que lo son? Por lo tanto, en la vida real no siempre podemos tomar muestras aleatorias en el sentido que hemos explicado.
 
 
 
@@ -104,22 +104,19 @@ knitr::include_graphics("AprendeR-Parte-II_files/figure-html/sistv.png")
 ```
 
 
-Cuando no disponemos de una lista de toda la población pero sí que tenemos una manera de acceder de manera ordenada a sujetos de la misma (por ejemplo, enfermos que acuden a un hospital), podemos realizar un muestreo sistemático tomando los sujetos a intervalos constantes a medida que los encontramos hasta completar el tamaño deseado de la muestra. Por ejemplo, para escoger una muestra de 10 estudiantes de la UIB, podríamos escoger cada décimo estudiante que entrase en un edificio del Campus por una puerta concreta hasta llegar a los 10.
+Cuando no disponemos de una lista de toda la población pero sí que tenemos una manera de acceder de manera ordenada a sujetos de la misma (por ejemplo, enfermos que acuden a un hospital), podemos realizar un muestreo sistemático tomando los sujetos a intervalos constantes a medida que los encontramos y hasta completar el tamaño deseado de la muestra. Por ejemplo, para escoger una muestra de 10 estudiantes de la UIB, podríamos escoger cada décimo estudiante que entrase en un edificio del Campus por una puerta concreta hasta llegar a los 10.
 
-Cuando el orden de los individuos de la población en la lista es aleatorio, el muestreo sistemático aleatorio es equivalente al muestreo aleatorio sin reposición. Pero en general este no es el caso, y se pueden producir sesgos. Por poner un caso extremo, si una clase de 100 estudiantes estuviera formada por 50 parejas de hermanos y tomáramos una muestra sistemática de 50 estudiantes, eligiéndolos por orden alfabético de los apellidos uno sí, uno no, es seguro que no aparecería ninguna pareja de hermanos en la muestra (porque dos hermanos son siempre consecutivos en la lista, y en nuestra muestra no hay ningún par de sujetos consecutivos). En cambio, la probabilidad de que una muestra aleatoria sin reposición del mismo tamaño contuviera una pareja de hermanos es prácticamente 1; en concreto esta probabilidad sería
+Cuando el orden de los individuos de la población en la lista es aleatorio, el muestreo sistemático aleatorio es equivalente al muestreo aleatorio sin reposición. Pero en general este no es el caso, y se pueden producir sesgos. Por poner un caso extremo, si una clase de 100 estudiantes estuviera formada por 50 parejas de hermanos y tomáramos una muestra sistemática de 50 estudiantes, eligiéndolos por orden alfabético de los apellidos uno sí, uno no, es seguro que no aparecería ninguna pareja de hermanos en la muestra (porque dos hermanos son siempre consecutivos en la lista, y en nuestra muestra no habría ningún par de sujetos consecutivos). En cambio, la probabilidad de que una muestra aleatoria sin reposición del mismo tamaño contuviera una pareja de hermanos es prácticamente 1; en concreto esta probabilidad sería
 
 $$
 \frac{100\times 98\times 96\times\cdots\times 2}{100\times 99\times 98\times\cdots\times 51}=\frac{2^{50}\cdot 50!^2}{100!}=`r 1-2^50/choose(100,50)`.
 $$
 
-```{r, include=FALSE}
-options(digits=3)
-```
    
    
 #### Muestreo aleatorio estratificado {-}
 
-Este tipo de muestreo se utiliza cuando la población está clasificada en  **estratos** que son de interés para la propiedad estudiada. En este caso, se toma una muestra aleatoria de cada estrato y se unen en una muestra global. A este proceso se le llama **muestreo aleatorio estratificado**. Normalmente, se impone que la composición por estratos de la muestra global mantenga las proporciones de la población original; es decir, que el tamaño de la muestra de cada estrato represente el mismo porcentaje del total de la muestra que el estrato correspondiente en la población completa.  Por ejemplo, los estratos podrían ser grupos de edad, y entonces la muestra de cada grupo de edad se tomaría proporcional a la fracción que representa dicho grupo de edad en la población total. O podrían ser los sexos anatómicos, y procuraríamos que nuestra muestra estuviera formada por un 50% de hombres y un 50% de mujeres. O, en las Islas Baleares, los estratos podrían ser las islas, de manera que la muestra tomada en cada isla fuera proporcional a la población relativa de la misma dentro del conjunto total de la comunidad autónoma. 
+Este tipo de muestreo se utiliza cuando la población está clasificada en  **estratos** que son de interés para la propiedad estudiada. En este caso, se toma una muestra aleatoria de cada estrato y se unen en una muestra global. A este proceso se le llama **muestreo aleatorio estratificado**. Normalmente, se impone que la composición por estratos de la muestra global mantenga las proporciones de la población original; es decir, que el tamaño de la muestra de cada estrato represente el mismo porcentaje del total de la muestra que el estrato correspondiente en la población completa.  Por ejemplo, los estratos podrían ser grupos de edad, y entonces la muestra de cada grupo de edad se tomaría proporcional a la fracción que representa dicho grupo de edad en la población total. O podrían ser los sexos anatómicos, y procuraríamos que nuestra muestra estuviera formada por un 50% de hombres y un 50% de mujeres. O, en las Islas Baleares, los estratos podrían ser las islas, de manera que el número de representantes de cada isla en la muestra fuera proporcional a su población relativa dentro del conjunto total de la comunidad autónoma. 
 
 Por continuar con nuestra urna de 100 bolas, supongamos que contiene 40 bolas de un color y 60 de otro color según muestra la Figura \@ref(fig:estratprevi).
 
@@ -148,7 +145,7 @@ El proceso de obtener y estudiar una muestra aleatoria en algunos casos es caro 
 
 Una alternativa posible sería, en vez de extraer una muestra aleatoria de todos los estudiantes de Primaria, escoger primero al azar unas pocas aulas de primaria de colegios de las Baleares, a las que llamamos en este contexto **conglomerados** (*clusters*), y formar entonces nuestra muestra con todos los alumnos de estas aulas. Y es que es mucho más sencillo poseer la lista completa de estudiantes de unas pocas aulas que conseguir la lista completa de todos los estudiantes de todos los colegios, y mucho más barato ir a unos pocos colegios concretos que ir a todos los colegios de las Islas a entrevistar a unos pocos estudiantes en cada centro. 
 
-Efectuamos también un muestreo por conglomerados cuando para medir algunas características de los ejemplares de una planta en un bosque concreto, cuadriculamos la superficie del bosque, escogemos una muestra aleatoria de sectores de la cuadrícula (serían los conglomerados de este ejemplo) y estudiamos las plantas de interés contenidas en los sectores elegidas.
+Por poner otro ejemplo, efectuamos también un muestreo por conglomerados cuando para medir algunas características de los ejemplares de una planta en un bosque concreto, cuadriculamos la superficie del bosque, escogemos una muestra aleatoria de sectores de la cuadrícula (serían los conglomerados de este ejemplo) y estudiamos las plantas de interés contenidas en los sectores elegidas.
 
 Volviendo de nuevo a nuestra urna, supongamos que sus 100 bolas se agrupan en 20 conglomerados de 5 bolas cada uno según las franjas verticales de la Figura \@ref(fig:clustprevi) (donde mantenemos la clasificación en dos colores para poder comparar el resultado del muestreo por conglomerados con el estratificado).
 
@@ -175,9 +172,9 @@ Observad la diferencia entre el muestreo estratificado y el muestreo por conglom
 
 #### Muestreos no aleatorios {-}
 
-Cuando la selección de la muestra no es aleatoria, se habla de  **muestreo no aleatorio**. En realidad es el tipo más frecuente de muestreo porque, en muchos casos,  nos tenemos que conformar con los sujetos disponibles.  Por ejemplo, en la UIB, para estimar la opinión que de un profesor tienen los alumnos de una clase, se consulta solo a los estudiantes que voluntariamente  rellenan la encuesta de opinión,  que de ninguna manera forman una  muestra aleatoria: el perfil del estudiante que contesta voluntariamente una encuesta de este tipo está muy definido y no viene determinado por el azar. En este caso se trataría de una **muestra autoseleccionada**. 
+Cuando la selección de la muestra no es aleatoria, se habla de  **muestreo no aleatorio**. En realidad es el tipo más frecuente de muestreo porque casi siempre nos tenemos que conformar con los sujetos disponibles.  Por ejemplo, en la UIB, para estimar la opinión que de un profesor tienen los alumnos de una clase, se consulta solo a los estudiantes que voluntariamente  rellenan la encuesta de opinión,  que de ninguna manera forman una  muestra aleatoria: el perfil del estudiante que contesta voluntariamente una encuesta de este tipo está muy definido y no viene determinado por el azar. En este caso se trataría de una **muestra autoseleccionada**. 
 
-Otro tipo de muestreos no aleatorios son los **oportunistas**. Este es el caso, por ejemplo, si para estimar la opinión que de un profesor tienen los alumnos de una asignatura se visita un día la clase y se pasa la encuesta a los estudiantes que ese día asistieron a clase. De nuevo, puede que los alumnos presentes no sean representativos del alumnado de la asignatura (pueden ser los más aplicados, o los que no tienen la gripe, o a los que la asignatura no les coincide con otra). Veamos otros ejemplos de muestreo oportunista. Supongamos que queremos estudiar una característica de los animales de una determinada especie en un hábitat, y la medimos en los animales que capturamos u observamos. Estos ejemplares no tienen por qué ser representativos de la población: a lo mejor son los menos espabilados. O imaginad que tenéis una bolsa con bolas de diferentes tamaños. Si las removéis bien, las pequeñas tenderán a ir a parar al fondo y las grandes a quedar en la parte superior. Por lo tanto, si tomáis una muestra de la capa superior (que será lo más cómodo), no será representativa del total de la bolsa. 
+Otro tipo de muestras no aleatorias son las **oportunistas**. Este es el caso, por ejemplo, si para estimar la opinión que de un profesor tienen los alumnos de una asignatura se visita un día la clase y se pasa la encuesta a los estudiantes que ese día asistieron a clase. De nuevo, puede que los alumnos presentes no sean representativos del alumnado de la asignatura (pueden ser los más aplicados, o los que no tienen la gripe, o a los que la asignatura no les coincide con otra). Veamos otros ejemplos de muestreo oportunista. Supongamos que queremos estudiar una característica de los animales de una determinada especie en un hábitat, y la medimos en los animales que capturamos. Estos ejemplares no tienen por qué ser representativos de la población: a lo mejor son los menos espabilados. O imaginad que tenéis una bolsa con bolas de diferentes tamaños. Si las removéis bien, las pequeñas tenderán a ir a parar al fondo y las grandes a quedar en la parte superior. Por lo tanto, si tomáis una muestra de la capa superior (que será lo más cómodo), no será representativa del total de la bolsa. 
 
 La Figura \@ref(fig:oport) describe una muestra oportunista de nuestra urna: sus 15 primeras bolas. Aunque toda muestra de un mismo tamaño tiene la misma probabilidad de obtenerse por medio de un muestreo aleatorio sin reposición, es difícil de creer que esta muestra sea aleatoria; basta que calculéis cuál es la probabilidad de que en una muestra aleatoria de 15 bolas de nuestra urna todas tengan el mismo color:
 
@@ -190,9 +187,8 @@ $$
 \frac{40\times 39\times \cdots\times 26+60\times 59\times \cdots\times 46}{100\times 99\times \cdots\times 86}=`r round((prod(26:40)+prod(46:60))/prod(86:100),5)`
 $$
 
-
 ```{r,include=FALSE}
-options(scipen=0)
+options(digits=7,scipen=0)
 ```
 
 
@@ -213,10 +209,10 @@ knitr::include_graphics("AprendeR-Parte-II_files/figure-html/poli.png")
 ```
 
 
-Otro ejemplo enrevesado (pero real) de muestreo polietápico sería, para elegir una muestra de adolescentes de una ciudad grande, escoger en primer lugar 4 secciones censales al azar; a continuación, escoger al azar 10 manzanas de cada una de estas secciones censales y una esquina de cada manzana; finalmente, recorrer cada manzana en sentido horario a partir de la esquina seleccionada y visitar un portal de cada tres, entrevistando todos los habitantes de 13 a 19 años en las casas o fincas visitadas. En este proceso, hemos realizado dos muestreos aleatorios sin reposición (de secciones censales y de manzanas) y un muestreo sistemático aleatorio (los portales). Si además los adolescentes que estudiamos al final no son todos los que viven en los portales seleccionados sino solo los que encontramos en casa el día que los visitamos, este muestreo oportunista significaría un cuarto paso en la formación de la muestra.
+Otro ejemplo enrevesado (pero real) de muestreo polietápico sería, para elegir una muestra de adolescentes de una ciudad grande, escoger en primer lugar 4 secciones censales al azar; a continuación, escoger al azar 10 manzanas de cada una de estas secciones censales y una esquina de cada manzana; finalmente, recorrer cada manzana en sentido horario a partir de la esquina seleccionada y visitar un portal de cada tres, entrevistando todos los habitantes de 13 a 19 años en las casas o fincas visitadas. En este proceso, hemos realizado tres muestreos aleatorios sin reposición (de secciones censales, de manzanas y de esquinas) y un muestreo sistemático (los portales). Si además los adolescentes que estudiamos al final no son todos los que viven en los portales seleccionados sino solo los que encontramos en casa el día que los visitamos, este muestreo oportunista significaría un cuarto paso en la formación de la muestra.
 
 
-Existen otros tipos de muestreo, solo hemos explicado los más comunes. En cualquier caso, lo importante es recordar que el estudio estadístico que se realice *a posteriori* deberá ser diferente según el muestreo usado. Por ejemplo, no se pueden usar las mismas técnicas para analizar una muestra aleatoria simple que una muestra por conglomerados. 
+Existen otros tipos de muestreo, solo hemos explicado los más comunes. En cualquier caso, lo importante es recordar que el estudio estadístico que se realice *a posteriori* deberá ser diferente según el tipo de muestreo usado. Por ejemplo, no se pueden usar las mismas técnicas para analizar una muestra aleatoria simple que una muestra por conglomerados. 
 
 
 
@@ -239,7 +235,7 @@ donde:
 
 * `n` es el tamaño de la muestra que deseamos extraer; 
 
-* el parámetro `replace` puede igualarse a `TRUE`, y será una muestra aleatoria simple, es decir, con reposición, o a `FALSE`, y será una muestra aleatoria sin reposición. Este último es su valor por defecto, por lo que no es necesario especificarlo si se quiere obtener una muestra sin reposición.
+* el parámetro `replace` puede igualarse a `TRUE`, y será una muestra aleatoria con reposición, es decir, simple, o a `FALSE`, y será una muestra aleatoria sin reposición. Este último es su valor por defecto, por lo que no es necesario especificarlo si se quiere obtener una muestra sin reposición.
 
 
 Los dos primeros parámetros han de entrarse en este orden o igualados a los parámetros `x` y `size`, respectivamente.
@@ -264,15 +260,18 @@ Veamos cómo extraer una m.a.s de una tabla de datos. Recordemos el *data frame*
 str(iris)
 ```
 
-Si queremos extraer una m.a.s. de 15 ejemplares (filas) de esta tabla de datos, podemos generar con `sample` una m.a.s. de índices de filas de la tabla y a continuación crear un *data frame* que contenga solo estas filas:
+Si queremos extraer una m.a.s. de 15 ejemplares (filas) de esta tabla de datos, podemos generar con `sample` una m.a.s. de índices de filas de la tabla (recordad que `dim` aplicado a un  `dataframe` nos da un vector con sus dimensiones, es decir, sus números de filas y de columnas, en este orden; por lo tanto, `dim(iris)[1]` es el número de filas de `iris`): 
 
 ```{r} 
-x=sample(dim(iris)[1],15,replace=TRUE) #Los índices de la m.a.s.
-muestra_iris=iris[x,] #La m.a.s. de la tabla iris
-muestra_iris
+x=sample(dim(iris)[1],15,replace=TRUE) 
 ```
 
-Recordad que `dim` aplicado a un  `dataframe` nos da un vector con sus dimensiones: sus números de filas y de columnas, en este orden. Por lo tanto, `dim(iris)[1]` es el número de filas de `iris`. 
+y a continuación crear un *data frame* que contenga solo estas filas:
+
+```{r} 
+muestra_iris=iris[x,]
+muestra_iris
+```
 
 Si solo quisiéramos una muestra aleatoria de longitudes de pétalos, podríamos aplicar directamente la función `sample` al vector correspondiente:
 
@@ -296,7 +295,7 @@ set.seed(10)
 sample(iris$Petal.Length,10,replace=TRUE)
 ```
 
-Ejecutado inmediatamente después de  `set.seed(20)`, `sample(iris$Petal.Length,10,replace=TRUE)` siempre da lo mismo. Y ejecutado después de `set.seed(10)`, `sample(iris$Petal.Length,10,replace=TRUE)` vuelve a dar siempre da lo mismo, pero diferente de con  `set.seed(20)`. 
+Ejecutado inmediatamente después de  `set.seed(20)`, `sample(iris$Petal.Length,10,replace=TRUE)` siempre da lo mismo. Y ejecutado después de `set.seed(10)`, `sample(iris$Petal.Length,10,replace=TRUE)` vuelve a dar siempre lo mismo, pero diferente de con  `set.seed(20)`. 
 
 La función `set.seed` no solo fija el resultado de la primera instrucción tras ella que genere un vector aleatorio, sino que, como fija la semilla de aleatoriedad y las funciones posteriores la modificarán  de manera determinista, también fija los resultados de todas las instrucciones siguientes que generen vectores aleatorios.
 
@@ -356,7 +355,7 @@ replicate(10,round(mean(sample(iris$Petal.Length,15,replace=TRUE)),2))
 replicate(10,round(sd(sample(iris$Petal.Length,15,replace=TRUE)),2))
 ```
 
-porque el conjunto de muestras de las que hemos calculado la media en el primer `replicate` muy probablemente habrá sido diferente del conjunto de muestras de las que hemos calculado la desviación típica en el segundo `replicate`. Lo más adecuado es definir una función que calcule un vector con estos dos valores, y luego usarla dentro de un único `replicate`. 
+porque es muy probable que el conjunto de muestras de las que hemos calculado la media en el primer `replicate` sea diferente del conjunto de muestras de las que hemos calculado la desviación típica en el segundo `replicate`. Lo más adecuado es definir una función que calcule un vector con estos dos valores, y luego usarla dentro de un único `replicate`. 
 
 ```{r} 
 info=function(x){round(c(mean(x),sd(x)),2)}
@@ -375,6 +374,19 @@ set.seed(1000)
 replicate(10,round(mean(sample(iris$Petal.Length,15,replace=TRUE)),2))
 ```
 
+Un último comentario sobre la función `sample`. Aunque aquí la vamos a usar principalmente para tomar muestras aleatorias  en las que todos los sujetos de la población tengan la misma probabilidad de ser escogidos, también podemos emplearla para obtener muestras en las que diferentes sujetos puedan tener probabilidades diferentes de salir. Estas probabilidades se especifican con el parámetro `prob` igualado a un vector de probabilidades (o de pesos proporcionales a probabilidades) de la misma longitud que el vector `x` al cual apliquemos `sample`. De esta manera, la primera entrada de `prob` representa la probabilidad del primer elemento de `x`, la segunda entrada de  `prob` representa la probabilidad del segundo elemento de `x`, etc. 
+
+Por ejemplo, si queremos tomar una muestra aleatoria de tamaño 10 del vector $(1,2,3)$ de manera que cada elemento de este vector tenga probabilidad de ser escogido proporcional a su valor (es decir, el 2 tiene el doble de probabilidades de aparecer en la muestra que el 1, y el 3, el triple), podemos usar:
+
+```{r, error=TRUE, warning=TRUE}
+sample(1:3,10,prob=1:3)
+```
+
+¡Ups! Para tomar una muestra de 10 elementos de una población de 3 sujetos, habrá que permitir repeticiones
+
+```{r, error=FALSE, warning=TRUE}
+sample(1:3,10,replace=TRUE,prob=1:3)
+```
 
 Para terminar esta lección, damos una función sencilla para efectuar muestreos sistemáticos aleatorios. El objetivo es, dado un vector de longitud $N$, obtener una muestra de tamaño $n$. Lo que haremos será tomar el cociente por exceso $k=\lceil N/n\rceil$ de $N$ entre $n$ para determinar el período con el que tenemos que tomar los elementos de manera que todos los elementos puedan ser escogidos. A continuación elegimos al azar un elemento del vector con `sample` y a partir de él generamos una progresión aritmética de $n$ elementos y paso $k$, volviendo al inicio del vector si llegamos al final sin haber completado la muestra (lo que especificamos tomando los valores de la progresión aritmética módulo $N$). 
 
@@ -394,9 +406,10 @@ muestra_sist_iris=iris[x,] #La muestra de la tabla iris
 muestra_sist_iris
 ```
 
-Como 150/10=15, podemos observar que los índices avanzan de 15 en 15 a partir de uno que ha sido generado al azar.
+Como 150/10=15, podemos observar que los índices avanzan de 15 en 15 a partir del que ha sido escogido al azar en primer lugar.
 
 
+<!--
 ```{example, label=muestreo2}
 Por si tenéis curiosidad, el código siguiente ha producido las diferentes muestras aleatorias de las figuras de la Sección \@ref(sec:muestreo):
   
@@ -453,10 +466,14 @@ sort(sapply(Y,FUN=function(x){sample(x+20*(0:4),3,replace=FALSE)}))
 ```
 
 |          Los conglomerados escogidos han sido el `r sort(Y)[1]`, el `r sort(Y)[2]`, el `r sort(Y)[3]`, el `r sort(Y)[4]` y el `r sort(Y)[5]`.
+-->
 
 ## Guía rápida
 
-* `sample(x, n, replace=...)` genera una muestra aleatoria de tamaño `n` del vector `x`, con reposición si igualamos `replace` a `TRUE` y sin reposición si lo igualamos a `FALSE` (su valor por defecto). Si `x` es un número natural $x$, representa el vector 1,2,...,$x$.
+* `sample(x, n)` genera una muestra aleatoria de tamaño `n` del vector `x`. Si `x` es un número natural $x$, representa el vector 1,2,...,$x$. Dispone de los dos parámetros siguientes:
+
+    * `replace`, que igualado a `TRUE` produce muestras con reposición e igualado a `FALSE` (su valor por defecto) produce muestras sin reposición.
+    * `prob`, que permite especificar las probabilidades de aparición de los diferentes elementos de `x` (por defecto, son todas la misma).
 
 * `set.seed` permite fijar la semilla de aleatoriedad. 
 
@@ -465,7 +482,7 @@ sort(sapply(Y,FUN=function(x){sample(x+20*(0:4),3,replace=FALSE)}))
 ## Ejercicios
 
 
-### Modelo de test {-}
+### Test {-}
 
 
 *(1)* Queremos escoger 100 estudiantes de grado de la UIB para preguntarles cuántas horas semanales estudian. Como creemos que el tipo de estudio cursado influye en este dato, clasificamos los estudiantes según el centro (facultad o escuela) en el que están matriculados, y tomaremos una muestra al azar de cada centro, por sorteo a partir de la lista de todos los matriculados en ese centro y de manera que el tamaño de la muestra de cada centro sea proporcional al número de matriculados en el mismo. ¿De qué tipo de muestreo se tratará?
@@ -483,23 +500,19 @@ sort(sapply(Y,FUN=function(x){sample(x+20*(0:4),3,replace=FALSE)}))
 
 *(4)* Con una sola instrucción, calculad un vector formado por las medias de 100 muestras aleatorias sin reposición de 20 elementos cada una escogidos de un vector numérico llamado $X$ y llamadlo `medias`.
 
+<!--
+### Problemas {-}
 
-```{r,include=FALSE,eval=FALSE}
-### Ejercicios {-}
+**(1)** Considerad la tabla de datos **datacrab.txt** que encontraréis en https://raw.githubusercontent.com/AprendeR-UIB/Material/master/datacrab.txt y que contiene información sobre una muestra de  cangrejos. Cargadla en un `dataframe`.
 
-**1)** Considerad la tabla de datos que encontraréis en http://www.hofroe.net/stat557/data/crab.txt y que contiene información sobre una muestra de  cangrejos. Cargadla en un `dataframe`.
-
-*(a)* Definid una función de parámetros *s*, *n* y *N* que calcule la media y la desviación típica muestral del vector formado por las medias de los pesos de los individuos de cada una de las $N$ muestras aleatorias simples de $n$ filas de dicha tabla obtenidas usando como semilla de aleatoriedad el número $s$.  Tenéis que usar `set.seed` y `replicate` para definir la función.
+*(a)* Definid una función de parámetros *N*, *n* y *s* que tome $N$ muestras aleatorias simples de $n$ filas de este `dataframe` usando como semilla de aleatoriedad el número $s$; a continuación, calcule las medias de los pesos de los individuos de cada una de estas muestras; y finalmente calcule la media y la desviación típica muestral del vector formado por estas  medias.  Tenéis que usar `set.seed` y `replicate` para definir la función.
 
 *(b)* Aplicadla a $N$=100, $n$=30 y tomando como $s$ el número formado por las 5 primeras cifras de vuestro NIF o pasaporte.
 
 *(c)* ¿Qué valores predice el Teorema Central del Límite que se deberían obtener? ¿Habéis obtenido resultados similares a los predichos por dicho teorema?
 
-**2)** Extraed una muestra aleatoria estratificada de 15 flores de la tabla `iris` manteniendo en la muestra las proporciones de las diferentes especies en la tabla. Procurad que el método empleado sea lo más general posible, para poderlo aplicar a cualquier `data frame`, cualquier tamaño de muestra (aproximadamente) y una clasificación definida por cualquier factor del `data frame`. 
-```
-
-
-
+**(2)** Extraed una muestra aleatoria estratificada de 15 flores de la tabla `iris` manteniendo en la muestra las proporciones de las diferentes especies en la tabla. Procurad que el método empleado sea lo más general posible, para poderlo aplicar a cualquier `data frame`, cualquier tamaño de muestra (aproximadamente) y una clasificación definida por cualquier factor del `data frame`. 
+-->
 
 
 ### Respuestas al test {-}
@@ -509,58 +522,61 @@ sort(sapply(Y,FUN=function(x){sample(x+20*(0:4),3,replace=FALSE)}))
 
 *(2)* `mean(sample(X,15))`
 
-```{r,include=FALSE}
-#(También sería correcto `sum(sample(X,15))/15`. Y en ambos casos también sería correcto añadiendo dentro de la función `sample` el parámetro  `replace=FALSE`, que hemos omitido porque es el valor por defecto de `replace`.)
-```
+(También sería correcto `sum(sample(X,15))/15`. Y en ambos casos también sería correcto añadiendo dentro de la función `sample` el parámetro  `replace=FALSE`, que hemos omitido porque es el valor por defecto de `replace`.)
 
 *(3)* `muestra=iris[sample(dim(iris)[1],40),]`
 
-```{r,include=FALSE}
-#(También sería correcto consultar antes el número de filas con `str` o `tail`, ver que son 150, y responder `muestra=iris[sample(150,40),]`. Hay otras respuestas correctas, no las damos para no liaros. Además, y como antes, también sería correcto añadir `replace=FALSE`.)
-```
+(También sería correcto consultar antes el número de filas con `str` o `tail`, ver que son 150, y responder `muestra=iris[sample(150,40),]`. Hay otras respuestas correctas, no las damos para no liaros. Además, y como antes, también sería correcto añadir `replace=FALSE`.)
 
 *(4)* `medias=replicate(100,mean(sample(X,20)))`
 
-```{r,include=FALSE}
-#(¿Ya os hemos dicho que también sería correcto con `replace=FALSE`?)
+(¿Ya os hemos dicho que también sería correcto con `replace=FALSE`?)
+
+<!--
+### Soluciones sucintas de los problemas {-}
+
+**(1)** Cargamos la tabla en el `dataframe` **DCR**
+
+```{r}
+library(RCurl)
+datos=getURL("https://raw.githubusercontent.com/AprendeR-UIB/Material/master/datacrab.txt")
+DCR=read.table(text=datos,header=TRUE)
+str(DCR)
 ```
 
 
-```{r,include=FALSE,eval=FALSE}
-### Soluciones sucintas a los ejercicios {-}
+*(a)* Una posible función:
 
-**1)** *(a)*
-#```{r}
-DCR=read.table("http://www.hofroe.net/stat557/data/crab.txt",header=TRUE)
-M=function(n,N,s){
+```{r}
+M=function(N,n,s){
 set.seed(s)
-Muestras=replicate(N,mean(sample(DCR$Weight,n,replace=TRUE)))
+Muestras=replicate(N,mean(sample(DCR$weight,n,replace=TRUE)))
 Res=round(c(mean(Muestras),sd(Muestras)),2)
 attr(Res,"names")=c("Media","Desv. Típica")
 Res
 }
-#```
+```
 
 *(b)*
-#```{r}
-M(30,100,00)
-#```
+```{r}
+M(100,30,42)
+```
 
-*(c)* El TCL predice como media la de la población (el vector de pesos)
+*(c)* El TCL predice como media la de la población (que en este caso es el vector `DCR$weight`)
 
-#```{r} 
-round(mean(DCR$Weight),2)
-#``` 
+```{r} 
+round(mean(DCR$weight),2)
+``` 
 
 y como desviación típica la desviación típica de la población dividida por la raíz cuadrada del tamaño de las muestras
 
-#```{r} 
-round((sd(DCR$Weight)*sqrt(length(DCR$Weight)-1)/sqrt(length(DCR$Weight)))/sqrt(30),2)
-#``` 
+```{r} 
+round((sd(DCR$weight)*sqrt(length(DCR$weight)-1)/sqrt(length(DCR$weight)))/sqrt(30),2)
+``` 
 
-**2)** Por ejemplo
+**(2)** Por ejemplo
 
-#```{r}
+```{r}
 Clust_sample=function(DF,Fact,n){
   attach(DF)
   Tamaños=round(prop.table(table(Fact))*n)
@@ -569,25 +585,34 @@ Clust_sample=function(DF,Fact,n){
      Muestra=c(Muestra,sample(which(Fact==levels(Fact)[i]),Tamaños[i]))
   }
   detach(DF)
+  # Por si la muestra ha quedado "corta" debido a redondeos
+  # al calcular los tamaños de las submuestras:
+  Muestra=c(Muestra,sample((1:dim(DF)[1])[-Muestra],n-length(Muestra)))
   sort(Muestra)  
 }
 Clust_sample(iris,Species,15)
-#```
+```
 
 Una construcción equivalente, sin usar un bucle **for**
 
-#```{r}
-Clust_sample=function(DF,Fact,n){
+```{r}
+Clust_sample2=function(DF,Fact,n){
   attach(DF)
   M=length(levels(Fact))
   Tamaños=round(prop.table(table(Fact))*n)
   F=function(i){sample(which(Fact==levels(Fact)[i]),Tamaños[i])}
-  Muestra=sort(sapply(1:M,FUN=F))
+  Muestra=unlist(sapply(1:M,FUN=F))
   detach(DF)
-  Muestra 
+  Muestra=c(Muestra,sample((1:dim(DF)[1])[-Muestra],n-length(Muestra)))
+  sort(Muestra) 
 }
-Clust_sample(iris,Species,15)
-#```
+Clust_sample2(iris,Species,15)
 ```
 
+Por ejemplo, podríamos usar esta función para extraer una muestra aleatoria estratificada de 15 cangrejos de la tabla **datacrab.txt** usada en el problema anterior usando como estratos los valores de la variable `color.spine`.
 
+```{r,warning=FALSE}
+DCR$color.spine=as.factor(DCR$color.spine)
+Clust_sample(DCR,color.spine,15)
+```
+-->

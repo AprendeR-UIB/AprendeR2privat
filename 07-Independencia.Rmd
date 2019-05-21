@@ -13,32 +13,31 @@ P(X=x,Y=y)=P(X=x)\cdot P(Y=y)
 $$
 o si por el contrario hay algún par de valores $x$, $y$ para los que esta igualdad sea falsa.
 
-* En un **contraste de homogeneidad** se  escoge una de las variables y para cada uno de sus posibles valores se toma una muestra aleatoria, de tamaño prefijado, de individuos con ese valor para esa variable; su unión forma una **muestra estratificada** en el sentido de la Sección \@ref(sec:muestreo).  A continuación, se observa sobre cada uno de estos individuos la otra variable. En esta situación contrastamos si la distribución de probabilidades de la segunda variable es la misma en los diferentes estratos definidos por los niveles de la primera variable. Formalmente, sean $Y$ la variable que usamos en primer lugar para clasificar los individuos de la población y tomar una muestra de cada clase, con posibles valores $y_1,\ldots,y_k$, y $X$ la variable que medimos en segundo lugar sobre los individuos escogidos. Entonces, se contrasta si, para cada posible valor $x$ de $X$,
+* En un **contraste de homogeneidad** se  escoge una de las variables y para cada uno de sus posibles valores se toma una muestra aleatoria, de tamaño prefijado, de individuos con ese valor para esa variable; su unión forma una **muestra estratificada** en el sentido de la Sección \@ref(sec:muestreo).  A continuación, se observa sobre cada uno de estos individuos la otra variable. En esta situación contrastamos si la distribución de probabilidades de la segunda variable es la misma en los diferentes estratos definidos por los niveles de la primera variable. Formalmente, si $Y$ es la variable que usamos en primer lugar para clasificar los individuos de la población y tomar una muestra de cada clase, con posibles valores $y_1,\ldots,y_k$, y $X$ es la variable que medimos en segundo lugar sobre los individuos escogidos, se contrasta si, para cada posible valor $x$ de $X$,
 $$
 P(X=x|Y=y_1)=P(X=x|Y=y_2)=\cdots=P(X=x|Y=y_k)
 $$
 o si por el contrario existen $x$, $y_i$, $y_j$ tales que $P(X=x|Y=y_i)\neq P(X=x|Y=y_j)$.
 
-En ambos contrastes, la hipótesis nula es que las variables son independientes, bajo una u otra formulación matemática, y la hipótesis alternativa es que son **dependientes** (o **hay asociación** entre ellas). La hipótesis nula se rechaza si se obtiene evidencia que hace inverosímiles las igualdades de probabilidades que se contrastan.
+En ambos contrastes, la hipótesis nula es que las variables son independientes, bajo una u otra formulación matemática, y la hipótesis alternativa es que son **dependientes** (o que **hay asociación** entre ellas). La hipótesis nula se rechaza si se obtiene evidencia que hace inverosímiles las igualdades de probabilidades que se contrastan.
  
 
 Para ilustrar esta lección, hemos generado una muestra aleatoria de cadenas formadas por las 
 bases  "a", "c", "g" y "t". En concreto, hemos generado cadenas de longitud 100 de tres tipos: *A*, *B*  y  *C.* Estos tipos se distinguen por los vectores de probabilidades  que han determinado las frecuencias de  las cuatro bases en las secuencias.  Queremos  investigar si hay relación entre el tipo (A, B o C) de una cadena, y la base de frecuencia máxima en ella. 
 
-Los datos y el método de generación se pueden descargar del *url* siguiente: 
-http://bioinfo.uib.es/~recerca/MAT2/datos/bases/. Este directorio contiene:
+Los datos y el método de generación se encuentran en el repositorio siguiente: 
+https://github.com/biocom-uib/Experimento-Cadenas. Este directorio contiene:
  
-* El fichero *LeemeGeneracionDatos.html*, que contiene el código de generación
-de las muestras.
+* El fichero [*LeemeGeneracionDatos*](https://biocom-uib.github.io/Experimento-Cadenas/), que explica cómo se han generado las muestras.
 
-* El fichero *MuestraTotalBases.txt*, que contiene una tabla de datos de 10000 observaciones  de las dos variables siguientes sobre cadenas: el `tipo`, que es un factor con los niveles
-`A`, `B` y `C`, y  `max.frec`, que es otro factor que indica qué base tiene mayor frecuencia en la cadena. Este fichero es de formato texto, con una primera fila con el nombre de las variables y sus columnas separadas por tabuladores.
+* El fichero [*MuestraTotalBases.txt*](https://raw.githubusercontent.com/biocom-uib/Experimento-Cadenas/master/MuestraTotalBases.txt), que contiene una tabla de datos de 10000 observaciones  de las dos variables siguientes sobre cadenas: el `tipo`, que es un factor con los niveles `A`, `B` y `C`, y  `max.frec`, que es otro factor que indica qué base tiene mayor frecuencia en la cadena. Este fichero es de formato texto, con una primera fila con el nombre de las variables y sus columnas separadas por comas
  
+El código siguiente carga la tabla de datos, comprueba que no ha habido problemas, y extrae tres subtablas, una para cada tipo de cadena. Observad cómo se hace para cargar una tabla de datos de un *url* que empieza con **https**, por ejemplo en un repositorio GitHub:
 
-
-Los bloques de código siguientes cargan la tabla de datos, comprueban que no ha habido problemas, y extraen tres subtablas, una para cada tipo de cadena:
 ```{r}
-poblacion= read.table("http://bioinfo.uib.es/~recerca/MAT2/datos/bases/MuestraTotalBases.txt", sep="\t", header=TRUE)
+library(RCurl)
+datos=getURL("https://raw.githubusercontent.com/biocom-uib/Experimento-Cadenas/master/MuestraTotalBases.txt")
+poblacion=read.table(text=datos,header=TRUE,sep=",")
 str(poblacion)
 head(poblacion)
 poblacionA=subset(poblacion,tipo=="A")
@@ -85,7 +84,7 @@ donde:
 * `FUN` es la función que se aplica a las filas o columnas para obtener el valor marginal. Por defecto es la suma, que es la función que nos interesa en esta lección, y por tanto tampoco hace falta especificarlo.
  
 El resultado es otro objeto de la clase `table` al que se le han añadido una
-o varias filas o columnas. Éstas contiene  los márgenes  resultantes
+o varias filas o columnas. Éstas contienen  los márgenes  resultantes
 de aplicar la función indicada  por `FUN`. La etiqueta de las nuevas filas o columnas  es la
 función que se aplica.
 
@@ -187,7 +186,7 @@ chi2.estadistico
 ```
 y el p-valor del contraste, con 
 ```{r}
-p.valor=1-pchisq(chi2.estadistico,df=(4-1)*(3-1))
+p.valor=1-pchisq(chi2.estadistico,df=(dim(tabla.ind)[1]-1)*(dim(tabla.ind)[2]-1))
 p.valor
 ```
 
@@ -197,7 +196,7 @@ chisq.test(tabla.ind)
 ```
 Como el p-valor es muy pequeño,  podemos rechazar la hipótesis de que las variables objeto de estudio sean independientes: hemos obtenido evidencia estadísticamente significativa de que la distribución de las bases de frecuencia máxima *sí que depende* del tipo de cadena.
 
-Si algunas frecuencias absolutas esperadas son inferiores a 5, la
+Si algunas frecuencias absolutas esperadas fueran inferiores a 5, la
 aproximación del p-valor por una distribución $\chi^2$ podría no ser adecuada.
 En este caso, al ser las variables cualitativas, no podemos recurrir al
 agrupamiento de valores consecutivos, puesto que no tienen orden. Si se da esta
@@ -242,7 +241,7 @@ El p-valor es sistemáticamente pequeño, lo que nos permite rechazar la hipóte
 
 Como ya hemos dicho, la diferencia entre el contraste de homogeneidad y el de independencia está en el diseño del experimento: en cada contraste se selecciona la muestra  de una manera diferente. 
 
-En nuestro caso, para contrastar si la distribución de probabilidad de la base de mayor frecuencia es la misma para cada tipo de cadena o no, lo que vamos a hacer es tomar una muestra aleatoria de cadenas de cada tipo de 50 elementos cada una, juntarlas en una sola muestra *estratificada*, y aplicar el test $\chi^2$ a esta muestra. El código siguiente realiza el muestreo  en cada subpoblación de `tipo` y guarda la muestra total en el *data frame* `muestra.test.homo`. Fijamos de nuevo la semilla de aleatoriedad (otra), para que el test sea reproducible.
+En nuestro caso, para contrastar si la distribución de probabilidades de la base de mayor frecuencia es la misma para cada tipo de cadena o no, lo que vamos a hacer es tomar una muestra aleatoria de 50 cadenas de cada tipo, juntarlas en una sola muestra *estratificada*, y aplicar el test $\chi^2$ a esta muestra. El código siguiente realiza el muestreo  en cada subpoblación de `tipo` y guarda la muestra total en el *data frame* `muestra.test.homo`. Fijamos de nuevo la semilla de aleatoriedad (otra), para que el test sea reproducible.
 
 ```{r}
 set.seed(100)
@@ -294,8 +293,7 @@ En definitiva, el tipo de cadena afecta a la distribución de la base de mayor f
 
 ## Potencia de un contraste $\chi^2$
 
-La potencia de un contraste $\chi^2$, tanto de bondad de ajuste como de independencia o de homogeneidad, se puede calcular de manera similar a cómo lo hacíamos en otros tipos de contrastes de uno y dos parámetros. La instrucción para llevarlo a cabo es 
-`pwr.chisq.test` del paquete **pwr**. Su sintaxis básica es
+La potencia de un contraste $\chi^2$, tanto de bondad de ajuste como de independencia o de homogeneidad, se puede calcular de manera similar a cómo lo hacíamos en otros tipos de contrastes de uno o dos parámetros. La instrucción para llevarlo a cabo es  `pwr.chisq.test` del paquete **pwr**. Su sintaxis básica es
 ```{r, eval=FALSE}
 pwr.chisq.test(N=..., df=..., sig.level=..., w=..., power=...)
 ```
@@ -303,14 +301,14 @@ pwr.chisq.test(N=..., df=..., sig.level=..., w=..., power=...)
 donde:
  
 * `N` es el tamaño de la muestra.
-* `df` es el número de grados de libertad del estadístico.^[El número de clases menos 1 y menos el número de parámetros estimados en un test de bondad de ajuste, el número de niveles de una variable menos 1 por el número de niveles de la otra variable menos 1 en un test de independencia o de homogeneidad.]
+* `df` es el número de grados de libertad del estadístico (recordad que  en un test de bondad de ajuste es el número de clases menos 1 y menos el número de parámetros estimados, y en un test de independencia o de homogeneidad es el número de niveles de una variable menos 1 por el número de niveles de la otra variable menos 1).
 * `sig.level` es  el nivel de significación $\alpha$.
-* `w` es la magnitud del efecto, que en este tipo de tests se define como $\sqrt{X^2/N}$, siendo $X^2$ el estadístico de contraste y $N$ el tamaño de la muestra.
+* `w` es la magnitud del efecto, que en este tipo de tests se define como $\sqrt{X^2/N}$, siendo $X^2$ el valor del estadístico de contraste y $N$ el tamaño de la muestra completa.
 * `power` es  la potencia $1-\beta$.
  
 Si se especifican todos estos parámetros menos uno, la función da el valor del  parámetro que falta. Normalmente, querremos saber la potencia de un contraste *a posteriori* o el tamaño de la muestra necesario para tener la potencia deseada para una magnitud del efecto esperada concreta.
 
-Veamos algunos ejemplos de uso.
+Veamos algunos ejemplos de uso de esta función.
 
 ```{example}
 Vamos a calcular la potencia del contraste del Ejemplo \@ref(exm:dado).
@@ -324,7 +322,14 @@ y obtuvimos que $X^2=7.7$, por lo que la magnitud del efecto fue $w=\sqrt{7.7/40
 library(pwr)
 pwr.chisq.test(N=40, df=5, sig.level=0.05, w=sqrt(7.7/40))
 ```
+
 La potencia del contraste ha sido de, aproximadamente, un `r round(100*pwr.chisq.test(N=40, df=5, sig.level=0.05, w=sqrt(7.7/40))$power)`%.
+
+Para obtener solo la potencia, podéis usar el sufijo `$power`:
+
+```{r}
+pwr.chisq.test(N=40, df=5, sig.level=0.05, w=sqrt(7.7/40))$power
+```
 
 
 
@@ -335,14 +340,14 @@ Vamos a calcular la potencia del contraste de normalidad de las longitudes de lo
 ```
 
 ```{r}
-pwr.chisq.test(N=150, df=4, sig.level=0.1, w=sqrt(11.0637/15))
+pwr.chisq.test(N=150, df=4, sig.level=0.1, w=sqrt(11.0637/15))$power
 ```
 La potencia da  `r round(pwr.chisq.test(N=150, df=4, sig.level=0.1, w=sqrt(11.0637/15))$power)`: la probabilidad de que aceptáramos que  la muestra seguía una distribución normal si no fuera verdad es prácticamente 0.
 
 
 
 ```{example}
-En el contraste de homogeneidad de la Sección \@ref(sec:hom) hemos tomado tres muestras de 50 individuos cada una, en total 150 individuos. El estadístico de contraste ha valido $X^2=29.7373$, por lo que la magnitud del efecto en ese test ha sido de $w=\sqrt{29.7373/150}=0.445$, entre mediana y grande según la función `cohen.ES`, que nos da las magnitudes del efecto que por convención se entienden como pequeñas, medianas o grandes para los diferentes tests considerados en el  paquete **pwr**:
+En el contraste de homogeneidad de la Sección \@ref(sec:hom) hemos tomado tres muestras de 50 individuos cada una, en total 150 individuos. El estadístico de contraste ha valido $X^2=28.59$, por lo que la magnitud del efecto en ese test ha sido de $w=\sqrt{28.59/150}=0.4366$, entre mediana y grande según la función `cohen.ES`, que nos da las magnitudes del efecto que por convención se entienden como pequeñas, medianas o grandes para los diferentes tests considerados en el  paquete **pwr**:
   
   
 ```
@@ -360,6 +365,12 @@ cohen.ES(test="chisq", size="large")$effect.size
 pwr.chisq.test(df=6, sig.level=0.05, w=0.3, power=0.9)
 ```
 Hubiéramos necesitado como mínimo un total de unos `r round(pwr.chisq.test(df=6, sig.level=0.05, w=0.3, power=0.9)$N)` individuos: si queríamos tomar las tres muestras del mismo tamaño, esto significa tres muestras de como mínimo `r ceiling(round(pwr.chisq.test(df=6, sig.level=0.05, w=0.3, power=0.9)$N)/3)` individuos cada una.
+
+Para obtener solo el tamaño de la muestra, se puede añadir el sufijo `$N`:
+
+```{r}
+pwr.chisq.test(df=6, sig.level=0.05, w=0.3, power=0.9)$N
+```
 
 
 
@@ -445,8 +456,34 @@ pwr.chisq.test(N=200, df=(5-1)*(6-1), sig.level=0.1, w=sqrt(16.56/200))$power
 
 *(1)* NO
 
+Nosotros lo hemos mirado con
+
+```{r,eval=FALSE}
+A=matrix(c(2,17,11,8,10,25,3,14,5),nrow=3,byrow=TRUE)
+RS=rowSums(A)
+CS=colSums(A)
+frec.esperadas=RS%*%t(CS)/sum(A)
+frec.esperadas
+```
+
+
 *(2)* `r round(chisq.test(X)$p.value,3)` NO
 
+Nosotros lo hemos resuelto con
+
+```{r,eval=FALSE}
+X=matrix(c(50,19,17,21,69,47,56,37,33,23,18,21),nrow=3,byrow=T)
+round(chisq.test(X)$p.value,3)
+```
+
 *(3)* `r round(1-pchisq(16.56,(5-1)*(6-1)),3)` `r round(pwr.chisq.test(N=200, df=(5-1)*(6-1), sig.level=0.1, w=sqrt(16.56/200))$power,3)`
+
+Nosotros lo hemos resuelto con
+
+```{r,eval=FALSE}
+p.valor=1-pchisq(16.56,(5-1)*(6-1))
+potencia=pwr.chisq.test(N=200, df=(5-1)*(6-1), sig.level=0.1, w=sqrt(16.56/200))$power
+round(c(p.valor,potencia),3)
+```
 
 

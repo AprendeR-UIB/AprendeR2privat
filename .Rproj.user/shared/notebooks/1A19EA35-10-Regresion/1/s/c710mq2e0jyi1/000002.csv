@@ -1,0 +1,5 @@
+"0","round(predict(modelo_step,datos,interval=""prediction""),3) #Intervalo de confianza del valor predicho
+"
+"2","Error in UseMethod(""predict"") : 
+  no applicable method for 'predict' applied to an object of class ""call""
+"

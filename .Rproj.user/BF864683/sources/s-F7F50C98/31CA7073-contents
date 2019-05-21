@@ -1,0 +1,225 @@
+--- 
+title: "AprendeR: Parte II"
+author: "The AprendeR team"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: 
+   bookdown::pdf_book: default
+documentclass: book
+#bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+github-repo: cescrossello/AprendeR-II
+description: "Apuntes AprendeR bookdown::gitbook."
+---
+
+# Presentación {-}
+
+Placeholder
+
+
+
+<!--chapter:end:index.Rmd-->
+
+
+# (PART\*) Parte II: Estadística inferencial {-}
+# Distribuciones de probabilidad {#chap:distr}
+
+Placeholder
+
+
+## Ejercicios
+### Test {-}
+### Problemas {-}
+### Respuestas al test {-}
+### Soluciones sucintas de los problemas  {-}
+
+<!--chapter:end:01-Distribuciones.Rmd-->
+
+
+# Conceptos básicos de muestreo {#chap:muestreo}
+
+Placeholder
+
+
+## Tipos de muestreo {#sec:muestreo}
+#### Muestreo aleatorio con y sin reposición {-}
+#### Muestreo sistemático {-}
+#### Muestreo aleatorio estratificado {-}
+#### Muestreo por conglomerados {-}
+#### Muestreos no aleatorios {-}
+#### Muestreo polietápico {-}
+## Muestreo aleatorio con R
+## Guía rápida
+## Ejercicios
+### Test {-}
+### Problemas {-}
+### Respuestas al test {-}
+### Soluciones sucintas de los problemas {-}
+
+<!--chapter:end:02-Muestreo.Rmd-->
+
+
+# Estimación puntual {#chap:estimacion}
+
+Placeholder
+
+
+## Estimación máximo verosímil
+## Guía rápida
+## Ejercicios
+### Test {-}
+### Respuestas al test {-}
+
+<!--chapter:end:03-Estimacion_Puntual.Rmd-->
+
+
+# Intervalos de confianza {#chap:IC}
+
+Placeholder
+
+
+## Intervalo de confianza para la media basado en la t de Student {#sec:ICT}
+## Intervalos de confianza para la proporción poblacional
+## Intervalo de confianza para la varianza de una población normal {#sec:ICvar}
+## Bootstrap
+## Guía rápida
+## Ejercicios 
+### Modelo de test {-}
+### Respuestas al test {-}
+
+<!--chapter:end:04-Intervalos_de_confianza.Rmd-->
+
+
+# Contrastes de hipótesis {#chap:contrastes}
+
+Placeholder
+
+
+## Contrastes para medias
+### El test t {-}
+### Tests no paramétricos {-}
+## Contrastes para varianzas
+## Contrastes para proporciones
+## Cálculo de la potencia de un contraste 
+## Guía rápida
+## Ejercicios
+### Modelo de test {-}
+### Ejercicios {-}
+### Respuestas al test {-}
+### Respuestas sucintas a los ejercicios {-}
+
+<!--chapter:end:05-ContrastesI.Rmd-->
+
+
+# Contrastes de bondad de ajuste {#chap:bondad}
+
+Placeholder
+
+
+## Pruebas gráficas: Q-Q-plots
+## El test $\chi^2$ de Pearson
+## El test $\chi^2$ para distribuciones continuas
+## El test de Kolgomorov-Smirnov
+## Tests de normalidad
+## Guía rápida
+## Ejercicios
+### Modelo de test {-}
+### Respuestas al test {-}
+
+<!--chapter:end:06-BondadAjuste.Rmd-->
+
+
+# Contrastes de independencia y  homogeneidad {#chap:indep}
+
+Placeholder
+
+
+## Tablas de contingencia
+## Contraste de independencia
+## Contraste de homogeneidad {#sec:hom}
+## Potencia de un contraste $\chi^2$
+## Guía rápida
+## Ejercicios
+### Modelo de test {-}
+### Respuestas al test {-}
+
+<!--chapter:end:07-Independencia.Rmd-->
+
+
+# Introducción a la estadística descriptiva multidimensional
+
+Placeholder
+
+
+## Matrices de datos cuantitativos
+## Transformaciones lineales
+## Covarianzas y correlaciones
+## Correlación de Spearman
+## Contrastes de correlación
+## Un ejemplo
+## Representación gráfica de datos multidimensionales
+## Guía rápida
+## Ejercicios
+### Modelo de test {-}
+### Ejercicio  {-}
+### Respuestas al test {-}
+
+<!--chapter:end:08-EstMult.Rmd-->
+
+
+# ANOVA básico {#chap:ANOVA}
+
+Placeholder
+
+
+## Los modelos del ANOVA en R {#sec:modelos}
+## ANOVA de un factor {#sec:ANOVA-1}
+## ANOVA de bloques completos aleatorios
+## ANOVA de dos vías {#sec:ANOVA2}
+## Condiciones del ANOVA
+## Comparaciones de pares de medias {#sec:pares}
+### Tests t por parejas
+### Test de Duncan
+### Método de Tukey
+## Métodos no paramétricos
+## Guía rápida
+## Ejercicios
+### Test {-}
+### Respuestas al test {-}
+
+<!--chapter:end:09-ANOVA.Rmd-->
+
+
+# Regresión lineal {#chap:regresion}
+
+Placeholder
+
+
+## El modelo de regresión lineal en R {#sec:1}
+## Intervalos de confianza en el modelo de regresión lineal
+## Selección del modelo en base al ajuste de los datos {#sec:seleccion}
+## Diagnósticos de regresión {#sec:diagn}
+## Guía rápida
+## Ejercicios
+### Test {-}
+### Respuestas al test {-}
+
+<!--chapter:end:10-Regresion.Rmd-->
+
+
+# *Clustering* básico {#chap:clustering}
+
+Placeholder
+
+
+## Método de k-medias o *k-means*
+## Elección del número de *clusters*
+## Métodos jerárquicos aglomerativos
+## Guía rápida
+## Ejercicios
+### Test {-}
+### Respuestas al test {-}
+
+<!--chapter:end:11-Clustering.Rmd-->
+
