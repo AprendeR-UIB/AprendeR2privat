@@ -1,4 +1,4 @@
-Este es el respositorio GitHub de la edición preliminar en línea de la 2a parte del libro "AprendeR".
+Esto es una edición preliminar en línea de la 2a parte del libro "AprendeR", producido por un grupo de profesores del Departamento de Ciencias Matemáticas e Informática de la UIB.
 
 El libro está escrito en *R Markdown*, usando *RStudio* como editor de texto y el paquete **bookdown** para convertir los ficheros *markdown* en un libro. 
 
