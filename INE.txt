@@ -1,4 +1,4 @@
-"Comunitat" "Població" "Defuncions"
+"Comunidad" "Población" "Defunciones"
 "Andalucía"  8440300  34810
 "Aragón"  1347150  7196
 "Asturias (Principado de)"  1068165	6623
