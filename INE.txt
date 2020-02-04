@@ -1,0 +1,21 @@
+"Comunitat" "Població" "Defuncions"
+"Andalucía"  8440300  34810
+"Aragón"  1347150  7196
+"Asturias (Principado de)"  1068165	6623
+"Balears (Illes)"  1111674	4088
+"Canarias"  2118679	7593
+"Cantabria"  591888	3031
+"Castilla-La Mancha"  2100998	14532
+"Castilla y León"  2519875  9765
+"Cataluña"  7553650	32383
+"Comunitat Valenciana"  5113815  21614
+"Extremadura"  1104004  5751
+"Galicia"  2765940	15888
+"Madrid (Comunidad de)"  6495551  22446
+"Murcia (Región de)"  1472049	5330
+"Navarra (Comunidad Foral de)	"  644477  2846
+"País Vasco"  2191682  10639
+"Rioja (La)"  322027	1489
+"Ceuta"	84180  252
+"Melilla" 	83679  234
+

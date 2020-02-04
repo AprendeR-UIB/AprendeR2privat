@@ -10,7 +10,7 @@ contra la hipótesis alternativa
 
 * $H_1$:  La variable aleatoria poblacional *no* tiene distribución $X$
       
-Como siempre, para llevar a cabo el contraste tomamos una muestra aleatoria de la población. Entonces, obtenemos evidencia significativa de que la población no tiene distribución $X$ cuando es muy raro obtener nuestra muestra si la población tiene esta distribución. En este caso,  rechazamos la hipótesis nula en favor de la alternativa. Si, en cambio, no es del todo inverosímil que la muestra se haya generado con la distribución $X$, aceptamos la hipótesis nula "por defecto" y concluimos que la población sí que tiene esta distribución.  Pero que aceptemos la hipótesis nula no nos da evidencia de que la población tenga distribución $X$: simplemente nos dice que no encontramos motivos para rechazarlo. Naturalmente, a efectos prácticos, si aceptamos la hipótesis nula de que la población tiene la distribución $X$, actuaremos como si creyéramos que efectivamente esta hipótesis es verdadera, por ejemplo a la hora de decidir que fórmulas usar para calcular un intervalo de confianza o para efectuar un contraste de hipótesis. Pero no estaremos seguros de que podamos emplear estas fórmulas sobre nuestra muestra, simplemente no tendremos motivos para dejar de creerlo.
+Como siempre, para llevar a cabo el contraste tomamos una muestra aleatoria de la población. Entonces, obtenemos evidencia significativa de que la población no tiene distribución $X$ cuando es muy raro obtener nuestra muestra si la población tiene esta distribución. En este caso,  rechazamos la hipótesis nula en favor de la alternativa. Si, en cambio, no es del todo inverosímil que la muestra se haya generado con la distribución $X$, aceptamos la hipótesis nula "por defecto" y concluimos que la población sí que tiene esta distribución.  Pero que aceptemos la hipótesis nula no nos da evidencia de que la población tenga distribución $X$: simplemente nos dice que no encontramos motivos para rechazarlo. Naturalmente, a efectos prácticos, si aceptamos la hipótesis nula de que la población tiene la distribución $X$, actuaremos como si creyéramos que efectivamente esta hipótesis es verdadera, por ejemplo a la hora de decidir que fórmulas usar para calcular un intervalo de confianza o para efectuar un contraste de hipótesis. Pero no estaremos seguros de que podamos emplear estas fórmulas sobre nuestra muestra, simplemente no tendremos motivos para dudarlo.
 
 Los pasos habituales para contrastar la bondad del ajuste de una muestra a una distribución son los siguientes:
 
@@ -159,18 +159,11 @@ round(c(mu,sigma),3)
 y ahora generamos el Q-Q-plot usando estos parámetros
 
 ```{r,fig.cap="Normal-plot de longitudes de sépalos de flores iris.",label=qqplotiris}
-qqPlot(iris.sl, distribution="norm", mean=mu, sd=sigma,xlab="Cuantiles de la normal",id=FALSE,
-   ylab="Cuantiles de la muestra",main="")
+qqPlot(iris.sl, distribution="norm", mean=mu, sd=sigma, xlab="Cuantiles de la normal",
+   ylab="Cuantiles de la muestra", main="", pch=20, cex=0.7, id=FALSE)
 ```
 
-Vemos cómo los primeros puntos salen de la región de confianza del 95%. Esto significa que los datos están más desplazados hacia la izquierda de la media que lo que se esperaría en una muestra aleatoria de una normal. El *boxplot* de la Figura \@ref(fig:bplotiris) muestra este desplazamiento. 
-
-```{r,fig.cap="Boxplot de longitudes de sépalos de flores iris.",label=bplotiris}
-boxplot(iris.sl)
-```
-
-
-Interpretamos el Q-Q-plot anterior como evidencia de que estas longitudes no siguen una distribución normal. Más adelante usaremos tests de normalidad específicos para contrastar la normalidad de estos datos.
+Vemos cómo los primeros puntos salen de la región de confianza del 95% por encima. Esto significa que los valores más pequeños de la muestra son mayores de lo que sería de esperar si la muestra viniera de la variable normal. Interpretamos este Q-Q-plot como evidencia de que estas longitudes no siguen una distribución normal. Más adelante usaremos tests de normalidad específicos para contrastar la normalidad de estos datos.
 
 ## El test $\chi^2$ de Pearson
 
@@ -226,7 +219,9 @@ freqs=c(8,4,6,3,7,12)
 chisq.test(freqs)
 ```
 
-Observemos la estructura del resultado de un `chisq.test`. Nos da el valor del estadístico $X^2$ (`X-squared`), el p-valor del contraste (`p-value`), y los grados de libertad de la distribución $\chi^2$ que ha usado para calcularlo (`df`). En este caso, el p-valor es `r round(chisq.test(freqs)$p.value,3)`, y por lo tanto no podemos rechazar que el dado esté equilibrado. Queremos remarcar que, como R no sabe si hemos estimado o no parámetros, el número de grados de libertad que usa  `chisq.test` es simplemente el número de clases menos 1. Si no hemos estimado parámetros para calcular las probabilidades teóricas, ya va bien, pero si lo hemos hecho y por lo tanto el número de grados de libertad no es el adecuado, tendremos que calcular el p-valor correcto a partir del valor del estadístico. Veremos varios ejemplos más adelante.
+Observemos la estructura del resultado de un `chisq.test`. Nos da el valor del estadístico $X^2$ (`X-squared`), el p-valor del contraste (`p-value`), y los grados de libertad de la distribución $\chi^2$ que ha usado para calcularlo (`df`). En este caso, el p-valor es `r round(chisq.test(freqs)$p.value,3)`, y por lo tanto no podemos rechazar que el dado esté equilibrado: en más de 1 de cada 6 secuencias de 40 lanzamientos de un dado equilibrado obtenemos un valor de $X^2$ tan grande como el de esta secuencia, o mayor. 
+
+Queremos remarcar que, como R no sabe si hemos estimado o no parámetros, el número de grados de libertad que usa  `chisq.test` es simplemente el número de clases menos 1. Si no hemos estimado parámetros para calcular las probabilidades teóricas, ya va bien, pero si lo hemos hecho y por lo tanto el número de grados de libertad no es el adecuado, tendremos que calcular el p-valor correcto a partir del valor del estadístico. Veremos varios ejemplos más adelante.
 
 El resultado de un `chisq.test` es una `list`, de la que podemos extraer directamente la información que deseemos con los sufijos adecuados. En concreto, podemos obtener el valor del estadístico $X^2$ con el sufijo `$statistic`, los grados de libertad con el sufijo  `$parameter` y el p-valor con el sufijo `$p.value`.
 ```{r}
@@ -310,7 +305,7 @@ myoglobin=myoglobin[[1]]
 myoglobin[1:10]
 ```
 
-Nos preguntamos si en esta secuencia las cuatro bases aparecen de manera equiprobable. Para responder esta pregunta, calculamos las frecuencias de las letras con la función `table` y aplicamos el test $\chi^2$ a los resultados.  
+Nos preguntamos si podemos aceptar que en esta secuencia las cuatro bases aparecen de manera equiprobable. Para responder esta pregunta, calculamos las frecuencias de las letras con la función `table` y aplicamos el test $\chi^2$ a los resultados.  
 
 ```{r}
 table(myoglobin)
@@ -494,7 +489,7 @@ $$
 1-pchisq(chisq.test(freq.obs,p=prob.teor)$statistic,1)
 ```
 El p-valor es  grande. Por lo tanto, no podemos rechazar la hipótesis nula de que
-las apariciones de "cg" en muestras aleatorias de 20 posiciones sigan una ley binomial de parámetro $p=0.019$. Que es, por otro lado, lo que debería pasar si las "cg" estuvieran repartidas de manera aleatoria en la secuencia original, por lo que no podemos rechazar esto último.
+las apariciones de "cg" en muestras aleatorias de 20 posiciones sigan una ley binomial de parámetro $p=`r p.estim`$. Que es, por otro lado, lo que debería pasar si las "cg" estuvieran repartidas de manera aleatoria en la secuencia original, por lo que no podemos rechazar esto último.
 
 La conclusión es, por lo tanto, que aceptamos que las "cg" aparecen distribuidas de manera aleatoria en la secuencia de la mioglobina humana, pero tenemos evidencia estadísticamente significativa de que las "c" y las "g" que las forman no aparecen de manera independiente.
 
@@ -567,8 +562,10 @@ La frecuencia esperada de la última clase es inferior a 5, así que vamos a fun
 
 ```{r}
 k=length(probs.teor)
-probs.teor2=c(probs.teor[1:(k-2)],sum(probs.teor[(k-1):k])) #Nuevas probabilidades teóricas
-freq.obs2=c(freq.obs[1:(k-2)],sum(freq.obs[(k-1):k])) #Nuevas frecuencias observadas
+#Nuevas probabilidades teóricas:
+probs.teor2=c(probs.teor[1:(k-2)],sum(probs.teor[(k-1):k])) 
+#Nuevas frecuencias observadas:
+freq.obs2=c(freq.obs[1:(k-2)],sum(freq.obs[(k-1):k])) 
 chisq.test(freq.obs2,p=probs.teor2)
 ```
 Recordemos que el p-valor obtenido no es el correcto: como hemos estimado dos parámetros, lo tenemos que  calcular con una $\chi^2$ con 4 grados de libertad (dos menos de los que ha usado `chisq.test`):
@@ -708,7 +705,7 @@ boxplot(salary~sex, data=Salaries, main="")
 
 
 
-Si cancelamos este efecto, estandarizando las muestras, ¿siguen saliendo distribuciones diferentes?
+Si cancelamos este efecto, estandarizando las muestras, ¿siguen saliendo distribuciones diferentes? Para estandarizar las muestras usaremos la función `scale`, que explicaremos con más detalle en la Lección \@ref(chap:estmult). Esta función, aplicada tal cual a un vector, le resta su media y divide el resultado por su desviación típica muestral.
 ```{r, warning=TRUE}
 ks.test(scale(sal.male),scale(sal.female))
 ```
@@ -830,7 +827,38 @@ dagoTest(x)
 
 *(6)* Generad una muestra aleatoria *x* de 15 valores de una distribución normal con $\mu=2$ y $\sigma=0.8$ fijando antes `set.seed(2014)`, y una muestra aleatoria *y* de 25 valores de una distribución exponencial de parámetro $1/\lambda=0.5$  fijando antes `set.seed(1007)`. Aplicad el test de Kolmogorov-Smirnov para contrastar si *x* e *y* provienen de una misma distribución continua. Tenéis que dar el p-valor del test (redondeado a 3 cifras decimales, sin ceros innecesarios a la derecha) y decir (contestando SI  o NO) si, con un nivel de significación $\alpha=0.05$, tendríamos que rechazar la hipótesis nula de que estas dos muestras provienen de la misma distribución continua. Dad las dos respuestas en este orden y separadas por un único espacio en blanco.
 
+### Problemas {-}
 
+**(1)** La tabla siguiente da, por cada Comunidad Autónoma, su población según el censo de 2013 y el número de defunciones durante el primer semestre de 2014:
+
+
+```{r,echo=FALSE}
+INE=read.table("https://raw.githubusercontent.com/AprendeR-UIB/AprendeR2privat/master/INE.txt",header=TRUE)
+knitr::kable(INE, booktabs = FALSE,col.names=c("Comunidad","Población","Defunciones"))
+```
+
+Tenéis esta tabla de datos en el url https://raw.githubusercontent.com/AprendeR-UIB/AprendeR2privat/master/INE.txt. 
+
+Efectuad un test $\chi^2$ para contrastar si la población por comunidades autónomas y el número de defunciones por comunidad autónoma tienen la misma distribución. 
+
+
+**(2)** En los cursos introductorios de estadística se suele dar como ejemplo de variable aleatoria de Poisson los números de goles marcados en partidos de fútbol. Vamos a contrastarlo en un ejemplo concreto. La tabla siguiente da los números de partidos en los que se marcaron los diferentes números de goles en el Mundial de Sudáfrica del 2010:
+
+```{r,echo=FALSE}
+Goles=c(0,1,2,3,4,5,7)
+Frecuencia=c(7,17,13,14,8,3,1)
+df_aux=cbind(Goles, Frecuencia)
+knitr::kable(df_aux, booktabs = FALSE,col.names=c("Goles","Partidos"))
+```
+
+
+Usad un test $\chi^2$ para contrastar si podemos aceptar que estos números de goles siguen una ley de Poisson.
+
+**(3)** Considerad la tabla de datos que encontraréis en el url https://www.dropbox.com/s/qcok2f7u51teqr6/pacientes.txt?raw=1 y que ya usamos en un ejercicio de la Lección \@ref(chap:IC). 
+
+*(a)* Usad el test de Shapiro-Wilk para contrastar si los pesos de los hombres de esta tabla siguen una distribución normal
+
+*(b)* Llevad a cabo el mismo contraste usando un test $\chi^2$.
 
 ### Respuestas al test {-}
 
@@ -947,3 +975,93 @@ y=rexp(25,0.5)
 round(ks.test(x,y)$p.value,3)
 ```
 
+### Soluciones sucintas de los problemas {-}
+
+**(1)** Para realizar el test $\chi^2$ "exacto":
+```{r}
+INE=read.table("https://raw.githubusercontent.com/AprendeR-UIB/AprendeR2privat/master/INE.txt",
+               header=TRUE)
+str(INE)
+Freq.Obs.INE=INE$Defunciones  #Frecuencias observadas
+Prob.Esp.INE=INE$Población/sum(INE$Población)  #Probabilitades esperadas
+chisq.test(Freq.Obs.INE, p=Prob.Esp.INE)
+```
+
+Como la muestra no es muy grande, es más conveniente efectuar un test $\chi^2$ de Montecarlo
+```{r}
+chisq.test(Freq.Obs.INE, p=Prob.Esp.INE, simulate.p.value=TRUE)
+```
+
+La conclusión es la misma.
+
+**(2)**
+```{r}
+Goles=c(0,1,2,3,4,5,7)
+Partidos=c(7,17,13,14,8,3,1)
+N=sum(Partidos)
+lambda=sum(Goles*Partidos)/N
+probs=c(dpois(0:5,lambda),1-ppois(5,lambda))  #Probabilidades teóricas
+probs*N  #Frecuencias esperadas
+```
+Habrá que agrupar las tres últimas clases:
+```{r}
+probs=c(dpois(0:3,lambda),1-ppois(3,lambda))
+Partidos=c(Partidos[1:4],sum(Partidos[5:7]))
+chisq.test(Partidos,p=probs)
+```
+
+**(3)**
+```{r}
+Datos=read.table("https://www.dropbox.com/s/qcok2f7u51teqr6/pacientes.txt?raw=1",
+                header=TRUE)
+str(Datos)
+X=Datos$PESO[Datos$SEXO=="Hombre"]
+```
+
+*(a)*
+```{r}
+library(nortest)
+lillie.test(X)
+```
+
+*(b)* Veamos cuántos datos tenemos
+```{r}
+n=length(X)
+n
+```
+
+Como queremos que todas las clases tengan frecuencias esperadas al menos 5, no podemos usar muchas. Vamos a empezar con 7.
+
+```{r}
+paso=round((max(X)-min(X))/7,1)
+Límites=min(X)+paso*(0:7)
+Límites[1]=-Inf
+Límites[8]=Inf
+Límites
+table(cut(X,breaks=Límites))
+mu=mean(X)
+dt=sd(X)
+Límites.Izq=Límites[-8]
+Límites.Der=Límites[-1]
+probs=pnorm(Límites.Der,mu,dt)-pnorm(Límites.Izq,mu,dt)
+Frecs.Esp=round(probs*n,2)
+Frecs.Esp
+```
+
+Habrá que agrupar las dos primeras clases y las dos últimas
+
+```{r}
+Límites=Límites[-c(2,7)]
+Límites
+Frecs.Obs=table(cut(X,breaks=Límites))
+Límites.Izq=Límites[-6]
+Límites.Der=Límites[-1]
+probs=pnorm(Límites.Der,mu,dt)-pnorm(Límites.Izq,mu,dt)
+Frecs.Esp=round(probs*n,2)
+Frecs.Esp
+test=chisq.test(Frecs.Obs,p=probs)
+test
+p.valor=1-pchisq(test$statistic,test$parameter-2)
+p.valor
+```
+La conclusión usando el test S-W y el test $\chi^2$ es la misma.
