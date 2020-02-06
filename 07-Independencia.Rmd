@@ -32,12 +32,10 @@ https://github.com/biocom-uib/Experimento-Cadenas. Este directorio contiene:
 
 * El fichero [*MuestraTotalBases.txt*](https://raw.githubusercontent.com/biocom-uib/Experimento-Cadenas/master/MuestraTotalBases.txt), que contiene una tabla de datos de 10000 observaciones  de las dos variables siguientes sobre cadenas: el `tipo`, que es un factor con los niveles `A`, `B` y `C`, y  `max.frec`, que es otro factor que indica qué base tiene mayor frecuencia en la cadena. Este fichero es de formato texto, con una primera fila con el nombre de las variables y sus columnas separadas por comas
  
-El código siguiente carga la tabla de datos, comprueba que no ha habido problemas, y extrae tres subtablas, una para cada tipo de cadena. Observad cómo se hace para cargar una tabla de datos de un *url* que empieza con **https**, por ejemplo en un repositorio GitHub:
-
+El código siguiente carga la tabla de datos, comprueba que no ha habido problemas, y extrae tres subtablas, una para cada tipo de cadena. 
 ```{r}
-library(RCurl)
-datos=getURL("https://raw.githubusercontent.com/biocom-uib/Experimento-Cadenas/master/MuestraTotalBases.txt")
-poblacion=read.table(text=datos,header=TRUE,sep=",")
+poblacion=read.table("https://raw.githubusercontent.com/biocom-uib/Experimento-Cadenas/master/MuestraTotalBases.txt",
+                      header=TRUE,sep=",")
 str(poblacion)
 head(poblacion)
 poblacionA=subset(poblacion,tipo=="A")
@@ -176,7 +174,7 @@ Por lo tanto, con R obtenemos esta tabla de frecuencias esperadas de la manera s
 frec.esperadas=frec.abs.tipo%*%t(frec.abs.max.frec)/n
 frec.esperadas
 ```
-Aunque vayamos a realizar el test de independencia con una función de R, es necesario comprobar que todas estas frecuencias esperadas (o al menos la gran mayoría)  son mayores o iguales que 5, por lo que no podemos evitar este cálculo.  En este caso vemos que  se cumple esta condición.
+Aunque vayamos a realizar el test de independencia con una función de R, es necesario comprobar que todas estas frecuencias esperadas son mayores o iguales que 5, por lo que no podemos evitar este cálculo.  En este caso vemos que  se cumple esta condición.
 
 Si queremos realizar el test $\chi^2$ de independencia a mano, 
 podemos calcular el estadístico de forma directa con
@@ -203,7 +201,7 @@ agrupamiento de valores consecutivos, puesto que no tienen orden. Si se da esta
 situación, lo mejor es recurrir a simular el p-valor usando el parámetro
 `simulate.p.value=TRUE`.
 
-Por ejemplo, consideremos la situación siguiente:
+Por ejemplo, consideremos la situación siguiente, en la que tomamos una muestra de solo 100 cadenas y con otra semilla de aleatoriedad:
 ```{r}
 set.seed(300)
 n2=100
@@ -225,7 +223,7 @@ frec.esperadas2=frec.abs.tipo2%*%t(frec.abs.max.frec2)/n2
 frec.esperadas2
 ```
 
-Hay frecuencias esperadas inferiores a 5. Por lo tanto, lo recomendable es calcular el p-valor del test $\chi^2$ de independencia mediante simulaciones. Pero ahora tenemos que ir con cuidado en una cosa: hemos fijado la semilla de aleatoriedad para obtener una muestra de cadenas con frecuencias esperadas inferiores a 5. Lo recomendable es reiniciar esta semilla a un valor aleatorio con `set.seed(NULL)`.
+Hay una frecuencia esperada inferior a 5. Por lo tanto, lo recomendable es estimar el p-valor del test $\chi^2$ de independencia mediante simulaciones. Pero ahora tenemos que ir con cuidado en una cosa: hemos fijado la semilla de aleatoriedad para obtener una muestra de cadenas con frecuencias esperadas inferiores a 5. Lo recomendable es reiniciar esta semilla a un valor aleatorio con `set.seed(NULL)`.
 
 ```{r}
 set.seed(NULL)
@@ -323,9 +321,9 @@ library(pwr)
 pwr.chisq.test(N=40, df=5, sig.level=0.05, w=sqrt(7.7/40))
 ```
 
-La potencia del contraste ha sido de, aproximadamente, un `r round(100*pwr.chisq.test(N=40, df=5, sig.level=0.05, w=sqrt(7.7/40))$power)`%.
+La potencia del contraste ha sido de, aproximadamente, un `r library(pwr); round(100*pwr.chisq.test(N=40, df=5, sig.level=0.05, w=sqrt(7.7/40))$power)`%.
 
-Para obtener solo la potencia, podéis usar el sufijo `$power`:
+Para obtener solo la potencia, podemos usar el sufijo `$power`:
 
 ```{r}
 pwr.chisq.test(N=40, df=5, sig.level=0.05, w=sqrt(7.7/40))$power
@@ -435,6 +433,28 @@ contraste realizado?  Tenéis que dar ambos valores en este orden, redondeados a
 a la derecha,  y separados por un único espacio en blanco.
 
 
+### Ejercicios {-}
+
+**(1)** En un estudio para determinar si la tensión arterial depende del grupo sanguíneo, se tomó una muestra aleatoria de 1500 personas, se determinó su grupo sanguíneo y se les midió la tensión, clasificándola en baja, normal o alta. Los resultados fueron los de la tabla siguiente:
+
+$$
+\begin{array}{l}
+\hphantom{TensionAAa}\text{Grupo sanguíneo}\\
+\begin{array}{l|cccc}
+\text{Tensión} & \text{A} & \text{B} & \text{AB} & 0\\ \hline
+\text{Baja} & 28 &	9 	&7 &	31\\
+\text{Normal} &	543 &	211 &	90 &	476\\
+\text{Alta} & 44 	&22 	&8 &	31\\
+\hline
+\end{array}
+\end{array}
+$$
+
+Como hemos dicho, a partir de estos datos queremos decidir si hay asociación entre la tensión arterial y el grupo sanguíneo.
+
+*(a)* Según el diseño del experimento, ¿qué tipo de contraste estamos realizando: de independencia o de homogeneidad?
+
+*(b)* Comprobad si se dan las condiciones para poder efectuar un test $\chi^2$. En caso afirmativo, llevadlo a cabo. En caso negativo, usad el método de Montecarlo.
 
 
 ### Respuestas al test {-}
@@ -458,7 +478,7 @@ pwr.chisq.test(N=200, df=(5-1)*(6-1), sig.level=0.1, w=sqrt(16.56/200))$power
 
 Nosotros lo hemos mirado con
 
-```{r,eval=FALSE}
+```{r}
 A=matrix(c(2,17,11,8,10,25,3,14,5),nrow=3,byrow=TRUE)
 RS=rowSums(A)
 CS=colSums(A)
@@ -471,7 +491,7 @@ frec.esperadas
 
 Nosotros lo hemos resuelto con
 
-```{r,eval=FALSE}
+```{r}
 X=matrix(c(50,19,17,21,69,47,56,37,33,23,18,21),nrow=3,byrow=T)
 round(chisq.test(X)$p.value,3)
 ```
@@ -480,10 +500,25 @@ round(chisq.test(X)$p.value,3)
 
 Nosotros lo hemos resuelto con
 
-```{r,eval=FALSE}
+```{r}
 p.valor=1-pchisq(16.56,(5-1)*(6-1))
 potencia=pwr.chisq.test(N=200, df=(5-1)*(6-1), sig.level=0.1, w=sqrt(16.56/200))$power
 round(c(p.valor,potencia),3)
 ```
 
+### Soluciones sucintas de los problemas {-}
 
+*(a)* De independencia, porque la muestra es transversal
+
+*(b)* 
+```{r}
+Datos=rbind(c(28,9,7,31),c(543,211,90,476),c(44,22,8,31))
+Datos
+n=sum(Datos)
+n
+freq.esp.tipo=colSums(Datos)
+freq.esp.tensión=rowSums(Datos)
+frec.esperadas=freq.esp.tensión%*%t(freq.esp.tipo)/n
+frec.esperadas
+chisq.test(Datos)
+```
