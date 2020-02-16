@@ -112,7 +112,7 @@ library(MASS)
 fitdistr(y, densfun="poisson")
 ```
 
-El resultado dice que el valor estimado de  $\lambda$ es `r round(fitdistr(y, densfun="poisson")$estimate, 2)`, con un error típico estimado de   `r round(fitdistr(y, densfun="poisson")$sd, 2)`. Veámoslo directamente:  el estimador máximo verosímil de $\lambda$ es la media aritmética $\overline{X}$ y el error típico de este estimador es $\sqrt{\lambda}/\sqrt{n}$ (recordad que la desviación típica de una Poisson de parámetro $\lambda$ es $\sqrt{\lambda}$ y que el error típico de la media muestral es la desviación típica poblacional dividida por la raíz cuadrada del tamaño de la muestra), por lo que el error típico de una estimación es  $\sqrt{\overline{X}}/\sqrt{n}$.
+El resultado dice que el valor estimado de  $\lambda$ es `r library(MASS); round(fitdistr(y, densfun="poisson")$estimate, 2)`, con un error típico estimado de   `r round(fitdistr(y, densfun="poisson")$sd, 2)`. Veámoslo directamente:  el estimador máximo verosímil de $\lambda$ es la media aritmética $\overline{X}$ y el error típico de este estimador es $\sqrt{\lambda}/\sqrt{n}$ (recordad que la desviación típica de una Poisson de parámetro $\lambda$ es $\sqrt{\lambda}$ y que el error típico de la media muestral es la desviación típica poblacional dividida por la raíz cuadrada del tamaño de la muestra), por lo que el error típico de una estimación es  $\sqrt{\overline{X}}/\sqrt{n}$.
 
 ```{r}
 mean(y)
@@ -180,7 +180,7 @@ fitdistr(y,"normal")$estimate[2]  #Estimación de sigma
 
 ## Guía rápida
 
-*  `fitdistr` del paquete **MASS**, sirve para calcular los estimadores  máximo verosímiles  de los parámetros de una distribución a partir de una muestra. El resultado es una `list` que incluye los objetos `estimate` (los valores estimados) y `sd` (los errores típicos de las estimaciones). Sus parámetros principales son:
+*  `fitdistr`, del paquete **MASS**, sirve para calcular los estimadores  máximo verosímiles  de los parámetros de una distribución a partir de una muestra. El resultado es una `list` que incluye los objetos `estimate` (los valores estimados) y `sd` (los errores típicos de las estimaciones). Sus parámetros principales son:
 
      * `densfun`: el nombre de  la familia de distribuciones, entre comillas.
      * `start`: permite fijar el valor inicial del algoritmo numérico para calcular el estimador, si la función lo requiere.

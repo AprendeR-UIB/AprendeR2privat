@@ -689,7 +689,7 @@ sal.male=Salaries[Salaries$sex=="Male",]$salary  #Salarios de hombres
 1-length(unique(Salaries$salary))/length(Salaries$salary)  #Proporción global de salarios repetidos
 ```
 
-Las repeticiones en cada lista significan alrededor del 5% de los datos, y en total un `r round(100*(1-length(unique(Salaries$salary))/length(Salaries$salary)),1)`%. No son muchas, así que vamos a arriesgarnos con el test K-S.
+Las repeticiones en cada lista significan alrededor del 5% de los datos, y en total un `r library(car);  round(100*(1-length(unique(Salaries$salary))/length(Salaries$salary)),1)`%. No son muchas, así que vamos a arriesgarnos con el test K-S.
 
 ```{r,}
 ks.test(sal.male,sal.female)
@@ -767,7 +767,7 @@ library(fBasics)
 dagoTest(iris.sl)
 ```
 
-El p-valor relevante es el del *"Omnibus test"*, en este caso `r round(dagoTest(iris.sl)@test$p.value[1],4)` cae en la zona de penumbra.
+El p-valor relevante es el del *"Omnibus test"*, en este caso `r library(fBasics); round(dagoTest(iris.sl)@test$p.value[1],4)` cae en la zona de penumbra.
   
 Queremos hacer una última advertencia en esta sección. Aunque los tests que hemos explicado se pueden aplicar a muestras pequeñas, es muy difícil rechazar la normalidad de una muestra  muy pequeña. Por ejemplo, una muestra de 10 valores escogidos con distribución uniforme entre 0 y 5 pasa holgadamente todos los tests de normalidad (salvo el de D'Agostino-Pearson, que requiere una muestra de al menos 20 elementos):
 
@@ -783,7 +783,7 @@ dagoTest(x)
 
 ## Guía rápida
 
-* `qqPlot` del paquete **car**, sirve para dibujar un Q-Q-plot de una muestra contra una distribución teórica.  Sus parámetros principales son:
+* `qqPlot`, del paquete **car**, sirve para dibujar un Q-Q-plot de una muestra contra una distribución teórica.  Sus parámetros principales son:
 
     * `distribution`: el nombre de la familia de distribuciones, entre comillas.
     * Los parámetros de la distribución: `mean` para la media, `sd` para la desviación típica, `df` para los grados de libertad, etc.
@@ -802,13 +802,13 @@ dagoTest(x)
     * `ks.test(x,y)`: contrasta si los vectores `x` e `y`  han sido generados por la misma distribución continua.
     * `ks.test(x, "distribución", parámetros)`: contrasta si el vector `x`  ha sido generado por la distribución especificada, que se ha de indicar con el nombre de la función de distribución de R  (la que empieza con p).
 
-*  `lillie.test` del paquete **nortest**, realiza el test de normalidad de Kolmogorov-Smirnov-Lilliefors.
+*  `lillie.test`, del paquete **nortest**, realiza el test de normalidad de Kolmogorov-Smirnov-Lilliefors.
 
-*  `ad.test` del paquete **nortest**, realiza el test de normalidad de Anderson-Darling.
+*  `ad.test`, del paquete **nortest**, realiza el test de normalidad de Anderson-Darling.
 
-*  `shapiro.test`, realiza el test de normalidad de Shapiro-Wilk.
+*  `shapiro.test` realiza el test de normalidad de Shapiro-Wilk.
 
-*  `dagoTest` del paquete **fBasics**, realiza el test ómnibus de D'Agostino-Pearson.
+*  `dagoTest`, del paquete **fBasics**, realiza el test ómnibus de D'Agostino-Pearson.
 
 ## Ejercicios
 

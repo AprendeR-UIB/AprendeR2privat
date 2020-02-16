@@ -480,7 +480,7 @@ Para ello, usaremos la función  `sigma.test` aplicada a esta muestra y a `sigma
 library(TeachingDemos)
 sigma.test(TL45, sigma=1.5, alternative="less")
 ```
-El p-valor que obtenemos es `r round(sigma.test(TL45, sigma=1.5, alternative="less")$p.value,3)`, muy grande, por lo que no tenemos evidencia que nos permita concluir que $\sigma<1.5$.
+El p-valor que obtenemos es `r library(TeachingDemos); round(sigma.test(TL45, sigma=1.5, alternative="less")$p.value,3)`, muy grande, por lo que no tenemos evidencia que nos permita concluir que $\sigma<1.5$.
 
 **¡Atención!** El intervalo de confianza que da la función `sigma.test` es siempre para la varianza, aunque le entréis el valor de la desviación típica. Así que si queréis un intervalo de confianza para la desviación típica, tenéis que tomar la raíz cuadrada del que os da `sigma.test`:
 
@@ -1073,7 +1073,7 @@ y a continuación la usaríamos en la función `pwr.t.test`:
 ```{r}
 pwr.t.test(d=0.8, sig.level=0.05, power=0.99, type="one.sample")
 ```
-Bastarían `r ceiling(pwr.t.test(d=0.8, sig.level=0.05, power=0.99, type="one.sample")$n)` observaciones para tener la potencia deseada. Si en cambio esperáramos una magnitud del efecto pequeña:
+Bastarían `r library(pwr); ceiling(pwr.t.test(d=0.8, sig.level=0.05, power=0.99, type="one.sample")$n)` observaciones para tener la potencia deseada. Si en cambio esperáramos una magnitud del efecto pequeña:
 
 ```{r}
 pwr.t.test(d=cohen.ES(test="t",size="small")$effect.size,
@@ -1174,28 +1174,29 @@ Excepto en las que decimos lo contrario, todas las funciones para realizar contr
      *  `var.equal` para indicar en un contraste de dos medias usando muestras independientes si las varianzas poblacionales son iguales o diferentes.
 
 
-*  `SIGN.test` del paquete **BSDA**,  realiza un test de signos para contrastar una mediana. Dispone del parámetro  `md`  para entrar la mediana a contrastar.
+*  `SIGN.test`, del paquete **BSDA**,  realiza un test de signos para contrastar una mediana. Dispone del parámetro  `md`  para entrar la mediana a contrastar.
 
-*  `wilcox.test`, para realizar tests de Wilcoxon y de Mann-Whitney para contrastar una o dos  medianas (tanto usando muestras independientes como emparejadas). Sus parámetros son los mismos que los de `t.test` (salvo `var.equal`, que en estos tests no tiene sentido).
+*  `wilcox.test` realiza tests de Wilcoxon y de Mann-Whitney para contrastar una o dos  medianas (tanto usando muestras independientes como emparejadas). Sus parámetros son los mismos que los de `t.test` (salvo `var.equal`, que en estos tests no tiene sentido).
 
-*  `sigma.test`, para realizar tests $\chi^2$ para contrastar una varianza (o una desviación típica). Dispone de los parámetros `sigma` y `sigmasq` para indicar, respectivamente, la desviación típica o la varianza a contrastar.
+*  `sigma.test` realiza tests $\chi^2$ para contrastar una varianza (o una desviación típica). Dispone de los parámetros `sigma` y `sigmasq` para indicar, respectivamente, la desviación típica o la varianza a contrastar.
 
-*  `var.test`, para realizar tests F para contrastar dos varianzas (o dos desviaciones típicas). 
+*  `var.test` realiza tests F para contrastar dos varianzas (o dos desviaciones típicas). 
 
-*  `fligner.test`, para realizar tests no paramétricos de Fligner-Killeen para contrastar dos varianzas (o dos desviaciones típicas). No dispone de los parámetros `alternative` (solo sirve para contrastes bilaterales) ni `conf.level` (no calcula intervalos de confianza).
+*  `fligner.test` realiza tests no paramétricos de Fligner-Killeen para contrastar dos varianzas (o dos desviaciones típicas). No dispone de los parámetros `alternative` (solo sirve para contrastes bilaterales) ni `conf.level` (no calcula intervalos de confianza).
 
 
-*  `binom.test`, para realizar tests binomiales exactos para contrastar una proporción. Dispone del parámetro  `p` para indicar la proporción a contrastar.
+*  `binom.test` realiza tests binomiales exactos para contrastar una proporción. Dispone del parámetro  `p` para indicar la proporción a contrastar.
 
-*  `prop.test`, para realizar tests aproximados para contrastar  una proporción o dos proporciones de poblaciones usando muestras independientes.  También dispone del parámetro  `p` para indicar la proporción a contrastar en un contraste de una proporción.
+*  `prop.test` realiza tests aproximados para contrastar  una proporción o dos proporciones de poblaciones usando muestras independientes.  También dispone del parámetro  `p` para indicar la proporción a contrastar en un contraste de una proporción.
 
-*  `fisher.test`, para realizar tests exactos de Fisher para contrastar dos proporciones usando muestras independientes. 
+*  `fisher.test` realiza tests exactos de Fisher para contrastar dos proporciones usando muestras independientes. 
 
-*  `mcnemar.test`, para realizar tests bilaterales de McNemar para contrastar dos proporciones usando muestras emparejadas. No dispone de los parámetros `alternative`  ni `conf.level`.
+*  `mcnemar.test` realiza tests bilaterales de McNemar para contrastar dos proporciones usando muestras emparejadas. No dispone de los parámetros `alternative`  ni `conf.level`.
 
-* `cohen.ES` del paquete **pwr**, da los valores aceptados por convenio como "pequeño", "mediano" y "grande" para diferentes tests.
+* `cohen.ES`, del paquete **pwr**, da los valores aceptados por convenio como "pequeño", "mediano" y "grande" para diferentes tests.
 
-*  `pwr.t.test` del paquete **pwr**,  relaciona el tamaño de la(s) muestra(s), el nivel de significación, la potencia y la magnitud del efecto (en el sentido de que si se entran tres de estos valores se obtiene el cuarto) en tests t  de una media, de dos medias usando muestras emparejadas o de dos medias usando muestras  independientes del mismo tamaño. Sus parámetros, son
+*  `pwr.t.test`, del paquete **pwr**,  relaciona el tamaño de la(s) muestra(s), el nivel de significación, la potencia y la magnitud del efecto (en el sentido de que si se entran tres de estos valores se obtiene el cuarto) en tests t  de una media, de dos medias usando muestras emparejadas o de dos medias usando muestras  independientes del mismo tamaño. Sus parámetros, son
+
      * `n`: el tamaño de la muestra o de las muestras.
      *  `sig.level`:  el nivel de significación.
      * `power`:  la potencia.
@@ -1205,17 +1206,17 @@ Excepto en las que decimos lo contrario, todas las funciones para realizar contr
 
      
 
-*  `pwr.t2n.test`del paquete **pwr**,  relaciona los tamaños de muestras, el nivel de significación, la potencia y la magnitud del efecto en tests t   de dos medias  usando muestras independientes de distinto tamaño. Sus parámetros  son
+*  `pwr.t2n.test`, del paquete **pwr**,  relaciona los tamaños de muestras, el nivel de significación, la potencia y la magnitud del efecto en tests t   de dos medias  usando muestras independientes de distinto tamaño. Sus parámetros  son
      * `n1` y `n2`: los tamaños de las dos muestras.
      *  `sig.level`,   `power`,  `d` y `alternative` como en `pwr.t.test`.
 
 
-*  `pwr.p.test` del paquete **pwr**,  relaciona los tamaños de muestras, el nivel de significación, la potencia y la magnitud del efecto en contrastes aproximados de una proporción. Sus parámetros  son
+*  `pwr.p.test`, del paquete **pwr**,  relaciona los tamaños de muestras, el nivel de significación, la potencia y la magnitud del efecto en contrastes aproximados de una proporción. Sus parámetros  son
     * `n`,  `sig.level`, `power` y `alternative` como en  `pwr.t.test`.
     * `h`: la magnitud del efecto
 
 
-*  `pwr.2p.test` del paquete **pwr**,  relaciona los tamaños de muestras, el nivel de significación, la potencia y la magnitud del efecto en contrastes aproximados de dos proporciones usando muestras independientes del mismo tamaño. Sus parámetros  son los mismos que los de  `pwr.p.test`.
+*  `pwr.2p.test`, del paquete **pwr**,  relaciona los tamaños de muestras, el nivel de significación, la potencia y la magnitud del efecto en contrastes aproximados de dos proporciones usando muestras independientes del mismo tamaño. Sus parámetros  son los mismos que los de  `pwr.p.test`.
 
 *  `pwr.2p2n.test`, del paquete **pwr**,  relaciona los tamaños de muestras, el nivel de significación, la potencia y la magnitud del efecto en  contrastes aproximados de dos proporciones  usando  muestras de distinto tamaño. Sus parámetros  son
      * `n1` y `n2`: los tamaños de las dos muestras.

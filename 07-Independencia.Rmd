@@ -399,7 +399,7 @@ igualado a `c(1,2)`, que es su valor por defecto,  hace ambas cosas.
  
 
 
-* `pwr.chisq.test` del paquete **pwr**, sirve para calcular uno de los parámetros siguientes a partir de los otros cuatro:
+* `pwr.chisq.test`, del paquete **pwr**, sirve para calcular uno de los parámetros siguientes a partir de los otros cuatro:
  
     * `N`: el tamaño de la muestra.
     * `df`: el número de grados de libertad del contraste.
