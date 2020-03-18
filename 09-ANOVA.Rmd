@@ -1,5 +1,9 @@
 # ANOVA básico {#chap:ANOVA}
 
+```{r,include=FALSE}
+par(mfrow=c(1,1))
+```
+
 En esta lección explicamos cómo efectuar con R los ANOVA básicos que se estudian en cursos introductorios de estadística inferencial: de uno y dos factores y de bloques completos aleatorios. El tema central de la lección son los aspectos técnicos del ANOVA con R y los tests posteriores de comparación de pares de medias. Incluimos además una sección con  algunas instrucciones que permiten contrastar las condiciones necesarias sobre los datos para que un contraste ANOVA tenga sentido y una sección con algunos contrastes no paramétricos alternativos al ANOVA que se puedan usar justamente cuando no tiene sentido realizar un ANOVA.
 
 
@@ -50,7 +54,7 @@ anova(lm(fórmula, data=...))
 ## ANOVA de un factor {#sec:ANOVA-1}
 
 
-Para ilustrar el ANOVA de un factor con R utilizaremos un experimento en el que se quiso determinar si cuatro dietas concretas tenían alguna influencia en el tiempo de coagulación de la sangre en mamíferos.^[Véase *Statistics for Experimenters* (2a edición), de G. P. Box, W. G. Hunter y J. S. Hunte (Wiley, 2005), p. 133.] Para ello se escogieron 24 animales, se repartieron de manera aleatoria en 4 grupos de 6 ejemplares cada uno, y a cada grupo se le asignó de manera aleatoria una de las 4 dietas objeto de estudio, que indicaremos con A, B, C y D. Al cabo de un cierto tiempo se midió el tiempo de coagulación de la sangre en estos animales. Los resultados (redondeados a enteros) se muestran en la Tabla \@ref(tab:1). Observad que estamos ante un diseño experimental  de un solo factor: la dieta. 
+Para ilustrar el ANOVA de un factor con R utilizaremos un experimento en el que se quiso determinar si cuatro dietas concretas tenían alguna influencia en el tiempo de coagulación de la sangre en mamíferos: véase *Statistics for Experimenters* (2a edición), de G. P. Box, W. G. Hunter y J. S. Hunte (Wiley, 2005), p. 133. Para ello se escogieron 24 animales, se repartieron de manera aleatoria en 4 grupos de 6 ejemplares cada uno, y a cada grupo se le asignó de manera aleatoria una de las 4 dietas objeto de estudio, que indicaremos con A, B, C y D. Al cabo de un cierto tiempo se midió el tiempo de coagulación de la sangre en estos animales. Los resultados (redondeados a enteros) se muestran en la Tabla \@ref(tab:1). Observad que estamos ante un diseño experimental  de un solo factor: la dieta. 
 
 ```{r,label=1,echo=FALSE}
 knitr::kable(data.frame(
@@ -95,7 +99,7 @@ Para analizar la igualdad de los tiempos medios de coagulación bajo las cuatro 
 ```{r,eval=FALSE}
 boxplot(coag~diet, data=coagulacion)
 ```
-Observad que también hemos empleado una fórmula para indicar que queremos los diagramas de cajas de la variable `coag` separada por la variable `diet` del *data frame* `coagulacion`. Obtenemos la  Figura \@ref(fig:241), donde podemos ver que las medias muestrales para las dietas A y C son muy diferentes, y que en cambio seguramente no podremos rechazar que las medias poblacionales de las dietas A y D sean iguales. Por lo tanto, el resultado que esperamos del ANOVA es que nos permita rechazar la hipótesis nula de que los cuatro tiempos medios de coagulación son iguales. Ahora bien, hasta que no realicemos el ANOVA no sabremos si las diferencias que observamos en este diagrama son estadísticamente  significativas o no.
+Observad que también hemos empleado una fórmula para indicar que queremos los diagramas de cajas de la variable `coag` separada por la variable `diet` del *data frame* `coagulacion`. Obtenemos la  Figura \@ref(fig:241), donde podemos ver que las medias muestrales para las dietas A y C son muy diferentes, y que en cambio seguramente no podríamos rechazar que las medias poblacionales de las dietas A y D sean iguales. Por lo tanto, el resultado que esperamos del ANOVA es que nos permita rechazar la hipótesis nula de que los cuatro tiempos medios de coagulación son iguales. Ahora bien, hasta que no realicemos el ANOVA no sabremos si las diferencias que observamos en este diagrama son estadísticamente  significativas o no.
 
 
 
@@ -169,7 +173,7 @@ De manera similar, como el p-valor es el primer elemento de la columna `Pr(>F)`,
 ```{r}
 tabla[[1]]$"Pr(>F)"[1]
 ```
-Fijaos en que, como los nombres de estas columnas contienen espacios en blanco u otros símbolos no aceptados en los nombres de objetos de R (recordad la Lección 2 del primer volumen), hay que especificarlos entre comillas. 
+Fijaos en que, como los nombres de estas columnas contienen espacios en blanco u otros símbolos no aceptados en los nombres de objetos de R (recordad la [Lección 4 de la primera parte](https://aprender-uib.github.io/AprendeR1/chap-vect.html)), hay que especificarlos entre comillas. 
 
 El resultado de `anova(lm(...))` ya es directamente un *data frame*, por lo que para extraer los valores de la tabla ANOVA que produce podemos usar la sintaxis usual de los *data frames*.
 ```{r}
@@ -182,7 +186,7 @@ tabla2$"Pr(>F)"[1]
 Veamos otro ejemplo de ANOVA de un factor. 
 
 ```{example, label="rabbits"}
-En un experimento, se estudió el efecto de seis dietas sobre el crecimiento de crías de conejo doméstico.^[Véase *Experimental Design and Analysis*, de  M. Lentner y T. Bishop (Valley Book Co. 1986), p. 428.] Los datos obtenidos están recogidos en la tabla de datos `rabbit` del  paquete **faraway**.
+En un experimento, se estudió el efecto de seis dietas sobre el crecimiento de crías de conejo doméstico: véase *Experimental Design and Analysis*, de  M. Lentner y T. Bishop (Valley Book Co. 1986), p. 428. Los datos obtenidos están recogidos en la tabla de datos `rabbit` del  paquete **faraway**.
 
 
 ```
@@ -212,7 +216,7 @@ summary(aov(gain~treat, data=rabbit))[[1]]$"Pr(>F)"[1]
 Es muy importante tener presente que, al usar las instrucciones `aov` o `anova(lm(...))` para realizar un ANOVA, se tiene que  emplear un factor (o varios, en las próximas secciones) para separar la variable numérica en subpoblaciones. Veamos un ejemplo de lo que pasa si nos descuidamos en este punto.
 
 ```{example,label=bliss}
-En un experimento se estudió el efecto de la vitamina C en el crecimiento de los dientes.^[Véase *The Statistics of Bioassay* de C. I. Bliss (Academic Press, 1952), p. 499-501.] Se tomaron 60 cobayas y se trató cada uno de ellos con una combinación diferente de dosis de vitamina C (0.5, 1 o 2 mg) y  método de suministro de la misma (mediante zumo de naranja o como ácido ascórbico) durante 6 semanas, y se cuantificó el crecimiento de sus dientes  durante dicho período (más en concreto, se midió la longitud media de sus odontoblastos al final del mismo). El resultado es una tabla de 60 datos, que aparecen recogidos en el fichero `ToothGrowth` del paquete **UsingR**.
+En un experimento se estudió el efecto de la vitamina C en el crecimiento de los dientes: véase *The Statistics of Bioassay* de C. I. Bliss (Academic Press, 1952), p. 499-501. Se tomaron 60 cobayas y se trató cada uno de ellos con una combinación diferente de dosis de vitamina C (0.5, 1 o 2 mg) y  método de suministro de la misma (mediante zumo de naranja o como ácido ascórbico) durante 6 semanas, y se cuantificó el crecimiento de sus dientes  durante dicho período (más en concreto, se midió la longitud media de sus odontoblastos al final del mismo). El resultado es una tabla de 60 datos, que aparecen recogidos en el fichero `ToothGrowth` del paquete **UsingR**.
 
 
 
@@ -243,7 +247,7 @@ Ahora está bien. El p-valor prácticamente 0 nos permite rechazar la hipótesis
 
 ## ANOVA de bloques completos aleatorios
 
-Para ilustrar este tipo de ANOVA, analizaremos un  experimento sobre producción de penicilina.^[Véase *Practical Regression and Anova using R*, de J. Faraway, p. 186. Este texto se puede descargar de la página web https://cran.r-project.org/doc/contrib/Faraway-PRA.pdf.] En dicho experimento, se evaluaron cuatro procesos diferentes para determinar si había diferencias en su efectividad. Los cuatro procesos usaban una técnica de cultivo sumergido y empleaban agua de macerado de maíz como fuente de nitrógeno orgánico. Como la composición de este líquido puede afectar la producción final de penicilina, para evaluar los cuatro procesos se prepararon 5 mezclas diferentes de agua de macerado de maíz, de cada mezcla se tomaron 4 muestras y se asignaron de manera aleatoria a los cuatro procesos de producción. Los resultados obtenidos son los de la Tabla \@ref(tab:2), y aparecen recogidos en la tabla de datos `penicillin`  del paquete **faraway**.
+Para ilustrar este tipo de ANOVA, analizaremos un  experimento sobre producción de penicilina: vVéase *Practical Regression and Anova using R*, de J. Faraway, p. 186 (este texto se puede descargar de la página web https://cran.r-project.org/doc/contrib/Faraway-PRA.pdf). En dicho experimento, se evaluaron cuatro procesos diferentes para determinar si había diferencias en su efectividad. Los cuatro procesos usaban una técnica de cultivo sumergido y empleaban agua de macerado de maíz como fuente de nitrógeno orgánico. Como la composición de este líquido puede afectar la producción final de penicilina, para evaluar los cuatro procesos se prepararon 5 mezclas diferentes de agua de macerado de maíz, de cada mezcla se tomaron 4 muestras y se asignaron de manera aleatoria a los cuatro procesos de producción. Los resultados obtenidos son los de la Tabla \@ref(tab:2), y aparecen recogidos en la tabla de datos `penicillin`  del paquete **faraway**.
 
 
 ```{r,label=2,echo=FALSE}
@@ -257,8 +261,7 @@ booktabs=TRUE,
 caption ="Producción de penicilina bajo diferentes procesos de producción y mezclas.")
 ```
 
-Observad que estamos ante un diseño experimental  de bloques completos aleatorios. Los bloques son las mezclas de agua de macerado de maíz y  
-los tratamientos (los procesos de producción) se han asignado de manera aleatoria a las unidades experimentales (las muestras) de cada bloque, de tal manera que cada bloque contiene exactamente una unidad experimental para cada tratamiento. Este es un ejemplo paradigmático de uso de bloques: para evitar la influencia de la variable "extraña" dada por la composición  del agua de macerado de maíz, que puede influir en la producción, se escogen al azar unas mezclas y se prueban todos los procesos de manera independiente sobre cada mezcla.
+Observad que estamos ante un diseño experimental  de bloques completos aleatorios. Los bloques son las mezclas de agua de macerado de maíz y los tratamientos (los procesos de producción) se han asignado de manera aleatoria a las unidades experimentales (las muestras) de cada bloque, de tal manera que cada bloque contiene exactamente una unidad experimental para cada tratamiento. Este es un ejemplo paradigmático de uso de bloques: para evitar la influencia de la variable "extraña" dada por la composición  del agua de macerado de maíz, que puede influir en la producción, se escogen al azar unas mezclas y se prueban todos los procesos de manera independiente sobre cada mezcla.
 
 Demos un vistazo a esta tabla de datos.
 ```{r}
@@ -291,7 +294,7 @@ summary(aov(yield~treat+blend, data=penicillin))
 ```
 
 
-El p-valor que nos interesa en esta tabla es el de la fila `treat`: es `r round(summary(aov(yield~treat+blend, data=penicillin))[[1]]$"Pr(>F)"[1],4)`, por lo que en este experimento de bloques tampoco detectamos evidencia de que haya diferencias en la productividad media de los procesos estudiados. 
+El p-valor que nos interesa en esta tabla es el de la fila `treat`: es `r round(summary(aov(yield~treat+blend, data=penicillin))[[1]]$"Pr(>F)"[1],2)`, por lo que si tenemos en cuenta los bloques tampoco detectamos evidencia de que haya diferencias en la productividad media de los procesos estudiados. 
 El segundo p-valor de la tabla, `r round(summary(aov(yield~treat+blend, data=penicillin))[[1]]$"Pr(>F)"[2],4)`, es el del ANOVA de bloques que resulta de intercambiar los bloques y el tratamiento, tomando las mezclas como el factor a analizar y los procesos de producción como los bloques: 
 ```{r}
 summary(aov(yield~blend+treat, data=penicillin))
@@ -299,8 +302,7 @@ summary(aov(yield~blend+treat, data=penicillin))
 
 
 
-Podemos extraer los resultados de una
-tabla de un ANOVA de bloques generada por  `summary(aov(...))` añadiendo los mismos sufijos que en el caso de un factor. Así, por ejemplo, los p-valores son:
+Podemos extraer los resultados de una tabla de un ANOVA de bloques generada por  `summary(aov(...))` añadiendo los mismos sufijos que en el caso de un factor. Así, por ejemplo, los p-valores son:
 ```{r}
 tabla=summary(aov(yield~treat+blend, data=penicillin))
 tabla[[1]]$"Pr(>F)"
@@ -337,9 +339,9 @@ caption="Notas obtenidas por 15 estudiantes en diferentes actividades de evaluac
 
 
 
-Como podemos observar, se trata de un experimento de bloques   completos aleatorios: hemos escogido de manera aleatoria unos bloques (los estudiantes) y para cada estudiante hemos apuntado el valor de cada uno de los niveles del factor a estudiar (las notas en las diferentes actividades).`Este diseño es el adecuado para este problema, puesto que hay una gran variabilidad en las notas obtenidas por  estudiantes diferentes, desde matrículas a suspensos. Al tomar bloques, es decir, al considerar todas las notas de un conjunto aleatorio fijo de estudiantes, eliminamos el efecto de esta variabilidad.
+Como podemos observar, se trata de un experimento de bloques   completos aleatorios: hemos escogido de manera aleatoria unos bloques (los estudiantes) y para cada estudiante hemos apuntado el valor de cada uno de los niveles del factor a estudiar (las notas en las diferentes actividades). Este diseño es el adecuado para este problema, puesto que hay una gran variabilidad en las notas obtenidas por  estudiantes diferentes, desde matrículas a suspensos. Al tomar bloques, es decir, al considerar todas las notas de un conjunto aleatorio fijo de estudiantes, eliminamos el efecto de esta variabilidad.
 
-Vamos a construir un *data frame* con estos datos. Este *data frame* tendrá tres variables: `notas}, con las notas obtenidas por los estudiantes; `acts`, con los tipos de actividades de evaluación realizados; y `bloques`, con el indicador de cada estudiante.
+Vamos a construir un *data frame* con estos datos. Este *data frame* tendrá tres variables: `notas`, con las notas obtenidas por los estudiantes; `acts`, con los tipos de actividades de evaluación realizados; y `bloques`, con el indicador de cada estudiante.
 Entraremos las notas siguiendo las filas de la tabla anterior, y por lo tanto tenemos que construir estos dos factores entrando sus niveles en el orden adecuado: el factor `acts` ha de estar formado por 15 copias de la fila de actividades, y el factor `bloques` ha de estar formado por 5 copias de `1`, 5 copias de `2`, y así hasta 5 copias de `15`. Y recordad que `bloques` ha de ser un factor, puesto que queremos usarlo en un ANOVA. 
 
 ```{r}
@@ -372,16 +374,16 @@ Realicemos ahora el ANOVA.
 ```{r}
 summary(aov(notas~acts+bloques, data=notas.bloques))
 ```
-El p-valor que nos interesa es el de la primera fila, etiquetada con el factor cuyos niveles queremos comparar, en este caso `acts`. Este p-valor es muy pequeño, del orden de $10^{-7}$, lo que es evidencia de que, como nos temíamos, no todas las notas medias de las actividades de evaluación fueron iguales. 
+El p-valor que nos interesa es el de la primera fila, etiquetada con el factor cuyos niveles queremos comparar, en este caso `acts`. Este p-valor es muy pequeño, del orden de $10^{-7}$, lo que es evidencia de que, como nos temíamos, no todas las notas medias de las actividades de evaluación son iguales. 
 
 
 ## ANOVA de dos vías {#sec:ANOVA2}
 
-Para ilustrar el ANOVA de dos vías, es decir, de dos factores que pueden interacccionar, analizaremos en primer lugar los resultados de un experimento sobre el efecto de venenos y antídotos.^[Véase  "An analysis of transformations", de G. Box  y D. Cox,  *J. Roy. Stat. Soc. Series B*  26 (1964), pp. 211-252. Véase también  *Practical Regression and Anova using R*, de J. Faraway, p. 182.] En este experimento se usaron tres venenos y cuatro antídotos, y cada combinación de veneno y antídoto se administró a cuatro ratas elegidas de manera aleatoria e independiente. A continuación, se anotó el tiempo de supervivencia de cada animal, en unidades de 10 horas. Se trata, pues, de un diseño experimental de dos factores, en el que cada individuo ha sido asignado al azar a  cada nivel de los dos factores. Por otro lado, no podemos descartar *a priori* que haya interacción entre venenos y antídotos, puesto que un antídoto puede ser más efectivo para un veneno que para otro. 
+Para ilustrar el ANOVA de dos vías, es decir, de dos factores que pueden interacccionar, analizaremos en primer lugar los resultados de un experimento sobre el efecto de venenos y antídotos: véase  "An analysis of transformations", de G. Box  y D. Cox,  *J. Roy. Stat. Soc. Series B*  26 (1964), pp. 211-252; véase también  *Practical Regression and Anova using R*, de J. Faraway, p. 182. En este experimento se usaron tres venenos y cuatro antídotos, y cada combinación de veneno y antídoto se administró a cuatro ratas elegidas de manera aleatoria e independiente. A continuación, se anotó el tiempo de supervivencia de cada animal, en unidades de 10 horas. Se trata, pues, de un diseño experimental de dos factores, en el que cada individuo ha sido asignado al azar a  cada nivel de los dos factores. Por otro lado, no podemos descartar *a priori* que haya interacción entre venenos y antídotos, puesto que un antídoto puede ser más efectivo para un veneno que para otro. 
 
 El objetivo del experimento era contrastar la igualdad de los tiempos medios de supervivencia según el veneno, según el antídoto, y según la combinación veneno-antídoto. Los datos obtenidos en este experimento se han recogido en la tabla `rats` del paquete  **faraway**. 
 
-Pero ahora tenemos un problema con este *data frame*. Si cargamos  en una misma sesión varios paquetes que contengan objetos con el mismo nombre, R entiende en cada momento que  ese nombre refiere al objeto del paquete que se haya cargado más recientemente. Como en esta lección hemos cargado el paquete **UsingR** después del paquete **faraway**,  en estos momentos `rats` refiere a una tabla de datos del paquete **survival** que se ha cargado con **UsingR** y que no tiene nada que ver con los datos de este experimento. Una solución posible sería en este punto volver a cargar el paquete **faraway**. Otra opción más rápida es definir `rats` como el objeto `rats` de **faraway** por medio de la instrucción `rats=faraway::rats`. La construcción `paquete::objeto` invoca el `objeto` (una función, una tabla de datos,...) del **paquete** y sirve para eliminar ambigüedades como la que nos encontramos aquí.
+Pero ahora tenemos un problema con este *data frame*. Si cargamos  en una misma sesión varios paquetes que contengan objetos con el mismo nombre, R entiende en cada momento que  ese nombre refiere al objeto del paquete que se haya cargado más recientemente. Como en esta lección hemos cargado el paquete **UsingR** después del paquete **faraway**,  en estos momentos `rats` refiere a una tabla de datos del paquete **survival** que se ha cargado con **UsingR** y que no tiene nada que ver con los datos de este experimento. Una solución posible sería en este punto volver a cargar el paquete **faraway**. Otra opción más rápida es definir `rats` como el objeto `rats` de **faraway** por medio de la instrucción `rats=faraway::rats`. La construcción `paquete::objeto` invoca el `objeto` (una función, una tabla de datos,...) del **paquete** y sirve para eliminar ambigüedades como la que nos encontramos aquí. Además, tiene la ventaja de que no es necesario cargar el **paquete**, basta que esté instalado
 
 Vamos a cargar y explorar estos datos.
 
@@ -474,7 +476,7 @@ boxplot(len~supp, data=ToothGrowth2)
 boxplot(len~dose:supp, data=ToothGrowth2)
 ```
 
-Podemos observar diferencias tanto  según la dosis y como según el método de suministro. ¿Serán significativas?
+Podemos observar diferencias tanto  según la dosis como según el método de suministro. ¿Serán significativas?
 
 ```{r}
 summary(aov(len~supp*dose, data=ToothGrowth2))
@@ -644,7 +646,7 @@ En los ANOVA de dos vías, se ha de comprobar la igualdad de varianzas para las 
 ```{r}
 bartlett.test(time~interaction(poison,treat), data=rats)
 ```
-Obtenemos un p-valor de $`r round(bartlett.test(time~interaction(poison,treat), data=rats)$p.value,7)`$, por lo tanto, hemos de rechazar la igualdad de varianzas: las conclusiones de ese ANOVA de dos vías no tienen en principio ninguna validez, puesto que no hay evidencia de que se cumpla una de las condiciones para realizarlo.
+Obtenemos un p-valor de $`r round(bartlett.test(time~interaction(poison,treat), data=rats)$p.value,7)`$, por lo tanto, hemos de rechazar la igualdad de varianzas: las conclusiones de ese ANOVA de dos vías no tienen en principio ninguna validez, puesto que hay evidencia de que no se cumple una de las condiciones para realizarlo.
 
 Otros tests de igualdad de varianzas son el de  Fligner-Killeen, implementado en la función 
 `fligner.test` (y que tiene la misma particularidad que  `bartlett.test` a la hora de especificar combinaciones de factores) y el test de Levene, implementado en la función 
@@ -702,7 +704,7 @@ Así pues, podemos realizar el test t de Holm. En este caso tenemos que usar `pa
 ```{r}
 pairwise.t.test(notas.bloques$notas, notas.bloques$acts, paired=TRUE) 
 ```
-Los p-valores inferiores a 0.05 son los de los pares de actividades "Ejercicios de casa"-"Control 1",
+Los p-valores superiores a 0.05 son los de los pares de actividades "Ejercicios de casa"-"Control 1",
 "Control 1"-"Control 2", "Ejercicios de casa"-"Tests" y "Control 1"-"Tests". Por lo tanto,  a un nivel de significación global de 0.05,
 no podemos rechazar que las notas medias de estos pares de actividades sean iguales, mientras que en los otros tenemos evidencia de que son diferentes.
 
@@ -747,7 +749,7 @@ Observemos los resultados:
 
 * Con `group=FALSE` y sufijo `comparison`, obtenemos una tabla donde, para cada pareja de niveles del factor, se da, entre otros datos, un p-valor (la columna `p value`). Estos p-valores tienen el significado usual. En este ejemplo, de los p-valores  se desprende que no podemos rechazar que las medias para los pares A-D y B-C sean iguales (los p-valores son grandes), mientras que, en cambio, hay evidencia significativa de que el resto de los pares de dietas tienen medias diferentes (los p-valores son pequeños). Las dos últimas columnas de la tabla definen intervalos de confianza (del nivel de confianza correspondiente al nivel de significación que hayamos entrado con `alpha`) para las diferencias de la medias en el orden especificado en la primera columna.
 
-* Con `group=TRUE` y sufijo `groups`, obtenemos una tabla donde se agrupan los niveles según la igualdad de medias. En este caso, asigna las dietas B y C al grupo `a` y las dietas A y D al grupo `b`: dietas en el mismo grupo podemos aceptar que tienen medias iguales, dietas en grupos diferentes podemos concluir que tienen medias diferentes.
+* Con `group=TRUE` y sufijo `groups`, obtenemos una tabla donde se agrupan los niveles según la igualdad de medias. En este caso, asigna las dietas B y C al grupo `a` y las dietas A y D al grupo `b`: dietas en el mismo grupo hemos de aceptar que tienen medias iguales, dietas en grupos diferentes podemos concluir que tienen medias diferentes.
 
 
 
@@ -932,6 +934,27 @@ Con el sufijo `$"Pr(>F)"`, nos da directamente la columna de p-valores de la tab
 Realizad un test t por parejas de Bonferroni sobre estos datos con  un nivel de significación del 5%, para determinar qué pares de poblaciones podemos concluir que tienen medias diferentes con este nivel de significación. Tenéis que decir si podéis rechazar (con un SI) o no (con un NO), con un nivel de significación del 5%,  la igualdad de las medias de las poblaciones B y C.
 
 
+### Ejercicio
+
+*(1)* La tabla de datos `butterfat` del paquete **faraway** contiene los porcentajes de contenido de grasa en la leche en muestras aleatorias de 5 razas. Para cada raza hay 20 vacas en la muestra: 10 vacas de dos años, `2year`, y 10  de más de 4 años, `Mature`. Las variables de la tabla de datos son:
+
+* `Butterfat`: Porcentaje de contenido de grasa en la leche.
+* `Breed`: un factor que indica la raza de la vaca. Los niveles son: `Ayrshire`, `Canadian`, `Guernsey`, `Holstein-Fresian` y `Jersey`.
+* `Age`: una variable factor con los valores ya comentados: `2year` y `Mature`.
+
+Queremos usar estos datos para contrastar si el porcentaje medio de contenido de grasa en la leche depende de la raza o de la edad de la vaca.
+
+*(a)* Dibujad sendos gráficos con los diagrama de cajas de los porcentajes de contenido de grasa en la leche de las vacas de la muestra separados por la raza de la vaca y separados por su edad, respectivamente. Comentadlos.
+
+*(b)* Contrastad si cada muestra de una combinación de niveles (raza,edad) proviene de una distribución normal usando el test de Shapiro-Wilks con un nivel de significación $\alpha =0.05$.
+
+*(c)* Contrastad si todas las muestras de combinaciones de niveles (raza,edad) tienen la misma varianza, con un nivel de significación $\alpha =0.05$. 
+
+*(d)* Se satisfacen las hipótesis para poder usar un ANOVA de 2 vías para comprobar si el porcentaje medio de grasa en la leche depende de la raza o de la edad de la vaca? 
+
+*(e)* Sea cual sea vuestra respuesta a la pregunta anterior, realizad un test ANOVA de 2 vías para contrastar con un nivel de significación $\alpha =0.05$ si el porcentaje medio de grasa en la leche depende de la raza o de la edad de la vaca (no hace falta contrastar las combinaciones (raza,edad)). Hay interacción entre la raza de la vaca y la edad de la misma? 
+
+*(f)* Sea cual sea vuestra respuesta a la pregunta *(d)*, realizad también los contrastes de *(e)* mediante un test no paramétrico adecuado con un nivel de significación $\alpha =0.05$. Coinciden las conclusiones? 
 
 ### Respuestas al test {-}
 
@@ -1018,3 +1041,55 @@ pairwise.t.test(X$x,X$pobl,p.adjust.method="holm")
 options(show.signif.stars=TRUE)
 ```
 
+### Soluciones sucintas del ejercicio
+
+```{r}
+library(faraway)
+BF=butterfat
+str(BF)
+```
+
+*(a)*
+```{r}
+boxplot(Butterfat~Breed, data=BF)
+```
+
+```{r}
+boxplot(Butterfat~Age, data=BF)
+```
+
+
+*(b)* 
+```{r}
+Test.SW=function(x){shapiro.test(x)$p.value}
+aggregate(Butterfat~Breed:Age, data=BF,FUN=Test.SW)
+```
+
+Podemos concluir con un nivel de significación del 5% que todas las muestras provienen de variables normales.
+
+*(c)* 
+```{r}
+bartlett.test(Butterfat~interaction(Breed,Age), data=BF)
+```
+
+No podemos aceptar que se dé homocedasticidad.
+
+
+*(d)* No.
+
+*(e)* 
+```{r}
+summary(aov(Butterfat~Breed*Age,data=BF))
+```
+
+*(f)*
+```{r,error=TRUE}
+library(WRS2)
+pbad2way(Butterfat~Breed*Age,data=BF, est="median", nboot=500)
+```
+
+¡Ups!
+
+```{r}
+pbad2way(Butterfat~Breed*Age,data=BF, est="median", nboot=500,pro.dis=TRUE)
+```

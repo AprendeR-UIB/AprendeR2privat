@@ -1,0 +1,123 @@
+---
+title: "Matemàtiques II. Taller 4. Solucions"
+output:
+  html_document: default
+---
+
+
+*La taula de dades "Tips.txt" que trobareu a l'url https://raw.githubusercontent.com/AprendeR-UIB/MatesIIAD/master/dades/tips.txt conté informació sobre el comportament d'una mostra de clients d'un bar de Des Moines (Iowa, USA) en un cap de setmana. Suposarem en el que segueix que aquesta mostra es una mostra aleatòria simple (es podien repetir els clients) dels habitants de Des Moines. Les variables que ens interessen són:*
+
+* **TotBill**: *El total de la factura de la consumició (en dólars) sense tenir en compte la propina*
+* **Tip**: *La propina que va deixar el que pagà la consumició*
+* **Sex**: *El sexe del client	que pagà la consumició ("F" per dona, "M" per home)*
+* **Smoker**: *Si el que pagà la consumició era fumador o no (li demanaren)*
+* **Day**: *El dia de la setmana en el que es produí la consumició (abreviat per les 3 primeres lletres del nom en anglès)*
+* **Time**: *El periode del dia ("Day" o "Night") en que es produí la consumició*
+* **Size**: *Quanta gent formava el grup que va realitzar la consumició*
+
+*Carregau-lo en un data frame i comprovau que l'heu carregat correctament.*
+
+```{r}
+Tips=read.table("https://raw.githubusercontent.com/AprendeR-UIB/MatesIIAD/master/dades/tips.txt",header=TRUE)
+str(Tips)
+head(Tips)
+```
+
+**(1)** *Quina proporció de dones hi ha en aquesta mostra?*
+
+```{r}
+N=dim(Tips)[1] # Mida de la mostra 
+Dones=length(Tips$Sex[Tips$Sex=="F"])  # Nombre de dones en la mostra
+percent=round(100*Dones/N,1) # Calculam la proporció i la passam a percentatge arrodonit
+```
+
+Hi ha un `r percent` de dones.
+
+També hagués estat correcte (i segurament més elegant)
+
+```{r}
+# Calculam la taula de freqüències relatives de la variable Sex i ens quedam amb el primer valor
+# que correspon a les dones: "F" va abans de "M"
+# Després ho passam a percentatge arrodonit com abans
+percent2=round(100*prop.table(table(Tips$Sex))[1],1)
+```
+
+Hi ha un `r percent2` de dones.
+
+
+**(2)** *Afegiu al dataframe una nova variable* **Percent** *que doni a cada filera el percentatge del* **TotBill** *que representa la* **Tip**. *Per abreviar, en direm "el percentatge de propina".*
+
+Per afgeir una nova variable simplement l'hem d'igualar (amb el seu nom complet, inclòs el nom del *dataframe*) al que volguem que contengui:
+
+```{r}
+Tips$Percent=(Tips$Tip/Tips$TotBill)*100
+str(Tips)
+head(Tips)
+```
+
+**(3)** *Dibuixau un diagrama de caixes horitzontal dels percentatges de propina que deixaren els individus d'aquesta mostra. Mirant aquest diagrama, i sense calcular res, com creieu que és la mitjana d'aquest conjunt de dades, més gran, igual, o més petita que la mediana? Raonau-ho, i després calculau la mitjana i la mediana, a veure si l'heu encertat.*
+
+```{r}
+boxplot(Tips$Percent,horizontal=TRUE)
+mediana=round(median(Tips$Percent),2)
+mitjana=round(mean(Tips$Percent),2)
+```
+
+Hi ha valors molt grans que forçosament desplacen la mitjana a la dreta. En concret, la mediana és `r mediana` i la mitjana `r mitjana`.
+
+**(4)** *Calculau (amb una funció de R) un interval de confiança del 95% per al percentatge mitjà de propina que deixen els habitants de Des Moines quan van al bar. Donau:*
+
+* *Variable aleatporia d'interès:* "Prenc un habitat de Des Moines i mir quin percentatge de propina deixa"
+
+* *Paràmetre d'interès:* La mitjana, $\mu$
+
+* *Quina fórmula (o funció de R) emprareu i per què la podeu fer servir:* Com que la mostra és gran, de mida `r N`, faré servir la fórmula basada en la t de Student, amb la funció `t.test`
+
+* *L'interval de confiança demanat:*
+
+```{r}
+interval=round(t.test(Tips$Percent)$conf.int,2)
+```
+
+L'interval va de `r interval[1]` a `r interval[2]`.
+
+* *La norma de cortesia als EEUU és deixar almenys un 15% de propina. A la vista de l'interval de confiança obtingut, teniu evidència que els habitants d'Iowa són de mitjana més generosos, o menys generosos, del que marca aquesta norma de cortesia?*
+
+Tot l'interval està a la dreta del 15%, per tant amb un 95% de confiança afirmam que els habitants d'Iowa són de mitjana més generosos que el que marca la norma de cortesia.
+
+
+***(5)** *Quedau-vos ara amb només les fileres on* **TotBill** *és més gran o igual que 25 dólars. Quantes fileres són? Quin percentatge del total de consumicions representen? Quantes d'aquestes consumicions de 25 dólars o més varen ser pagades per dones? Quin percentatge d'aquestes consumicions de 25 dólars o més varen ser pagades per dones?*
+
+
+```{r}
+Grosses=Tips[Tips$TotBill>=25,]  #Ens quedam amb les fileres on el valor de TotBill és >=25
+N.Grosses=dim(Grosses)[1] #Quantes fileres han quedat
+N.Dones.Grosses=length(Grosses$TotBill[Grosses$Sex=="F"])  #Quantes fileres corresponen a dones
+percent.Grosses=round(100*N.Grosses/N,2)  #Percentatge de consumicions "grosses"
+percent.dones.Grosses=round(100*N.Dones.Grosses/N.Grosses,2) #Percentatge de consumicions "grosses" pagades per dones
+```
+
+Són `r N.Grosses` fileres, i representen un `r percent.Grosses` del total de la mostra. D'aquestes consumicions de 25 dólars o més, `r N.Dones.Grosses`varen ser pagades per dones, un `r percent.dones.Grosses`%.
+
+**(6)** *Calculau (amb una funció de R) un interval de confiança del 95% per a la proporció de consumicions de 25 dólars o més que són pagades per dones. Emprau la fórmula que vulgueu per calcular-lo, sempre que sigui correcte emprar-la. Com abans, donau:*
+
+
+* *Variable aleatòria d'interès:* "Prenc una consumició de 25 dólars o més a un bar d'Iowa i mir si l'ha pagada una dona"
+
+* *Paràmetre d'interès:* La proporció poblacional d'èxit $p_X$
+
+* *Quina fórmula (o funció de R) emprareu i per què la podeu fer servir:* Faré servir la fórmula exacta de Clopper-Pearson, per què sempre se pot fer servir. També podria fer servir la de Wilson, perquè la mostra de consumicions de 25 dólars o més és de mida més gran que 30, però no puc fer servir la de Laplace perquè no arriba a 100.
+
+* *L'interval de confiança demanat:*
+
+```{r}
+library(epitools)
+interval.Grosses=c(binom.exact(N.Dones.Grosses,N.Grosses)$lower,binom.exact(N.Dones.Grosses,N.Grosses)$upper)
+```
+
+L'interval va de `r round(interval.Grosses[1],3)`  a `r round(interval.Grosses[2],3)`.
+
+* *Si no hi hagués cap biaix sexista, la proporció de consumicions de 25 dólars o més pagades per dones hauria de ser del 50%, o almenys similar a la de dones que pagaren consumicions en aquesta taula? Obteniu evidència que hi hagi qualque biaix sexista en aquest sentit a Iowa?*
+
+No conté el 50%, per tant amb un 95% de confiança podem afirmar que menys de la meitat de les consumicions de 25 dólars a més són pagades per dones. Però sí que conté el `r percent.dones.Grosses`% que representa el percentatge de consumicions pagades per dones en aquesta mostra.
+

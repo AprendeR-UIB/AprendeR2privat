@@ -1408,10 +1408,6 @@ round(cor(x,y,method="spearman"),3)
 ### Soluciones sucintas de los problemas  {-}
 
 
-```{r,include=FALSE}
-detach(package:printr)
-```
-
 **(1)** 
 ```{r}
 notas=read.table("https://raw.githubusercontent.com/AprendeR-UIB/Material/master/NotasMatesI14.csv",sep=",",header=TRUE)
