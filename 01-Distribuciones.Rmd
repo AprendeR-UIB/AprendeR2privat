@@ -198,15 +198,15 @@ dnorm(0.3)
 dnorm(0.3,0,1)
 ```
 
-Las funciones densidad y distribución de una variable aleatoria se pueden dibujar con la función `curve`. Así, la función siguiente dibuja la gráfica de la densidad de una variable normal estándar de la Figura \@ref(fig:dnorm):
+Las funciones densidad y distribución de una variable aleatoria se pueden dibujar con la función `curve`. Así, la función siguiente dibuja la gráfica de la densidad de una variable normal de la Figura \@ref(fig:dnorm):
 
-```{r, fig.cap="Función densidad de una variable *N*(0,1).", label=dnorm}
+```{r, fig.cap="Función densidad de una variable *N*(0,1.5).", label=dnorm}
 curve(dnorm(x,0,1.5),-5,5,xlab="",ylab="",main="")
 ```
 
-De manera similar, la función siguiente dibuja la gráfica de la función de distribución de una variable normal estándar de la Figura \@ref(fig:pnorm):
+De manera similar, la función siguiente dibuja la gráfica de la función de distribución de una variable normal de la Figura \@ref(fig:pnorm):
 
-```{r, fig.cap="Función distribución de una variable *N*(0,1).", label=pnorm}
+```{r, fig.cap="Función distribución de una variable *N*(0,1.5).", label=pnorm}
 curve(pnorm(x,0,1.5),-5,5,xlab="",ylab="",main="")
 ```
 
